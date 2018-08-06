@@ -12,6 +12,10 @@ class KnnClassifier:
         self.knn_classifier = KNeighborsClassifier(n_neighbors=nrof_neighborgs)
         self.knn_classifier.fit(train_data, target_classes)
 
+    def predict_class_for_image(self, image_features):
+        prediction = self.knn_classifier.predict([image_features])
+        return prediction
+
     def predict_proba_for_image_features(self, image_features, class_names):
         predictions = self.knn_classifier.predict_proba([image_features])
         best_class_indices = np.argmax(predictions, axis=1)

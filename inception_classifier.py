@@ -3,7 +3,7 @@ import numpy as np
 
 
 class InceptionClassifier:
-    def __init__(self, pb_model_location: str, gpu_memory_fraction: float = 0.6):
+    def __init__(self, pb_model_location: str, gpu_memory_fraction: float = 1.0):
         gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=gpu_memory_fraction)
         with tf.Graph().as_default():
             with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options, log_device_placement=False)) as self.sess:

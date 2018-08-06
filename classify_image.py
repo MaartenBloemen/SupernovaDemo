@@ -1,10 +1,10 @@
 import argparse
-import numpy as np
 import cv2
 import os
+import time
+from pyautogui import press
 from inception_classifier import InceptionClassifier
 from knn_classifier import KnnClassifier
-from webcam import WebcamStream
 
 
 def load_images_from_folder(folder):
@@ -23,22 +23,34 @@ def load_images_from_folder(folder):
 
 
 def main(args):
-    class_names = ['left', 'right', 'shoot']
+    threshold = 0.8
+    class_names = ['left', 'right', 'space']
 
-    features, classes = load_images_from_folder(args.folder)
+    features, classes = load_images_from_folder('/home/maarten/Documents/SupernovaTest')
 
     knn = KnnClassifier(features, classes)
-    predicted_class, probability = knn.predict_proba_for_image_features(None, class_names)
+    vc = cv2.VideoCapture(0)
+    rval, frame = vc.read()
+
+    while rval:
+        start = time.time()
+        image_features = classifier.get_features_from_image(frame)
+        predicted_class, probability = knn.predict_proba_for_image_features(image_features, class_names)
+        print('Time to analyze frame: {} ms'.format((time.time() - start) * 1000))
+        print(predicted_class, probability)
+        if probability > threshold:
+            press(predicted_class)
+        rval, frame = vc.read()
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('model', type=str, help='Path to the model a protobuf (.pb) file.')
+    parser.add_argument('folder', type=str, help='Path to training data.')
     parser.add_argument('--video_src', type=int, help='The index of the video source.', default=0)
 
     args = parser.parse_args()
 
     classifier = InceptionClassifier(args.model)
-    webcam = WebcamStream(args.video_src)
 
     main(args)
