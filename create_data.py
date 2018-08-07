@@ -5,7 +5,7 @@ import argparse
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('location', type=str, help='Location to safe the data')
+    parser.add_argument('--location', type=str, help='Location to safe the data', default='/home/maarten/Documents/SupernovaTrainData/space')
 
     args = parser.parse_args()
     i = 1

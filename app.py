@@ -1,0 +1,21 @@
+import argparse
+from user_interface import Window
+from webcam import WebcamStream
+from ai_manager import AiManager
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('model', type=str, help='Path to the model a protobuf (.pb) file.')
+    parser.add_argument('folder', type=str, help='Path to training data.')
+    parser.add_argument('--video_src', type=int, help='The index of the video source.', default=0)
+
+    args = parser.parse_args()
+
+    stream = WebcamStream(args.video_src)
+    stream.start()
+
+    ai_manager = AiManager(args.model, args.folder)
+
+    ui = Window(stream, ai_manager, args.folder)
+    ui.video_loop()
+    ui.root.mainloop()
