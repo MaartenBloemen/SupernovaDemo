@@ -13,9 +13,12 @@ if __name__ == '__main__':
     vc = cv2.VideoCapture(0)
     rval, frame = vc.read()
 
+    time.sleep(3)
+
     while rval:
         print('Saved image {}'.format(i))
-        cv2.imwrite('/home/maarten/Documents/SupernovaTest/shoot/{}.jpg'.format(i), frame)
-        i+=1
+        cv2.imwrite('{}/{}.jpg'.format(args.location, i), frame)
+        i += 1
         time.sleep(0.1)
         rval, frame = vc.read()
+        if i == 51: break
