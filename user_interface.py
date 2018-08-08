@@ -1,54 +1,126 @@
 from tkinter import *
-from PIL import Image, ImageTk
-import time
+from PIL import Image, ImageFont, ImageDraw, ImageTk
+import math
 import cv2
 
 
 class Window:
+    FONT = cv2.FONT_HERSHEY_SIMPLEX
+
     training = False
-    retrain = False
     gesture = None
-    index = 0
+    wait_time = 30
+    classifying = False
 
     def __init__(self, video_stream, ai_manager, save_location):
         self.ai_manager = ai_manager
-        self.vs = video_stream
+        self.video_stream = video_stream
 
         self.save_location = save_location
 
         self.root = Tk()
-        self.root.bind('<Escape>', lambda e: self.stop())
+        self.root.bind('<Escape>', lambda e: self.exit())
+
+        background_image = PhotoImage(file="/home/craftworkz/Documents/SupernovaDemo/resources/bg.png")
+        background_label = Label(self.root, image=background_image)
+        background_label.image = background_image
+        background_label.place(x=0, y=0, relwidth=1, relheight=1)
+
         self.panel = None
-        self.label = Label(self.root, text="Click the buttons to start and stop recording gestures.")
-        self.label.grid(row=0, columnspan=4)
-        lbl = Label(self.root, text="Gestures to go left")
-        lbl.grid(row=1, column=1, columnspan=2)
-        btn = Button(self.root, text="Start!", command=lambda: self.start_clicked('left'))
-        btn.grid(row=2, column=1, padx=10)
-        btn = Button(self.root, text="Stop!", command=self.stop_clicked)
-        btn.grid(row=2, column=2, padx=10)
-        lbl = Label(self.root, text="Gestures to go right")
-        lbl.grid(row=3, column=1, columnspan=2)
-        btn = Button(self.root, text="Start!", command=lambda: self.start_clicked('right'))
-        btn.grid(row=4, column=1, padx=10, pady=10)
-        btn = Button(self.root, text="Stop!", command=self.stop_clicked)
-        btn.grid(row=4, column=2, padx=10, pady=10)
-        lbl = Label(self.root, text="Gestures to shoot")
-        lbl.grid(row=5, column=1, columnspan=2)
-        btn = Button(self.root, text="Start!", command=lambda: self.start_clicked('space'))
-        btn.grid(row=6, column=1, padx=10, pady=10)
-        btn = Button(self.root, text="Stop!", command=self.stop_clicked)
+        self.label = CustomFontLabel(self.root, text="Click the buttons to start and stop recording gestures.",
+                                     font_path='resources/nidsans-webfont.ttf', size=22, bg='#51ffff', fg='#1b3848')
+        self.label.grid(row=0, columnspan=4, padx=10, pady=10)
+
+        # label and buttons to go left
+        lbl = CustomFontLabel(self.root, text="Gestures to go left", font_path='resources/nidsans-webfont.ttf', size=16,
+                              bg='#95cc71', fg='#1b3848')
+        lbl.grid(row=1, column=1, columnspan=2, padx=5)
+
+        btn = Button(self.root, text="Train!", command=lambda: self.start_clicked('left'), width=5,
+                     highlightthickness=0, bd=0)
+        btn.grid(row=2, column=1)
+
+        btn = Button(self.root, text="Reset!", command=lambda: self.reset_clicked('space'), width=5,
+                     highlightthickness=0, bd=0)
+        btn.grid(row=2, column=2)
+
+        # label and buttons to go right
+        lbl = CustomFontLabel(self.root, text="Gestures to go right", font_path='resources/nidsans-webfont.ttf',
+                              size=16,
+                              bg='#95cc71', fg='#1b3848')
+        lbl.grid(row=3, column=1, columnspan=2, padx=5)
+
+        btn = Button(self.root, text="Train!", command=lambda: self.start_clicked('right'), width=5,
+                     highlightthickness=0, bd=0)
+        btn.grid(row=4, column=1)
+
+        btn = Button(self.root, text="Reset!", command=lambda: self.reset_clicked('space'), width=5,
+                     highlightthickness=0, bd=0)
+        btn.grid(row=4, column=2)
+
+        # label and buttons to shoot
+        lbl = CustomFontLabel(self.root, text="Gestures to shoot", font_path='resources/nidsans-webfont.ttf', size=16,
+                              bg='#95cc71', fg='#1b3848')
+        lbl.grid(row=5, column=1, columnspan=2, padx=5)
+
+        btn = Button(self.root, text="Start!", command=lambda: self.start_clicked('space'), width=5,
+                     highlightthickness=0, bd=0)
+        btn.grid(row=6, column=1)
+
+        btn = Button(self.root, text="Reset!", command=lambda: self.reset_clicked('space'), width=5,
+                     highlightthickness=0, bd=0)
         btn.grid(row=6, column=2)
+
+        # id
+        lbl = CustomFontLabel(self.root, text="id: ", font_path='resources/nidsans-webfont.ttf', size=16,
+                              fg='#ffffff', bg="#51ffff")
+        lbl.grid(row=10, column=0, sticky=W, padx=10, rowspan=3, pady=10)
+        self.txt = Text(self.root, height=1, width=10)
+        self.txt.grid(row=10, column=0, sticky=W, padx=50, rowspan=3, pady=10)
+
+        # space invader
+        btn = Button(self.root, text="Start space invader", command=self.start_space_invaders, width=50,
+                     height=2, highlightthickness=0, bd=0, bg="#51ffff")
+        btn.grid(row=10, column=0, columnspan=3, rowspan=3, pady=10)
+
         self.root.wm_title("Supernova: Space invader")
-        self.root.wm_protocol("WM_DELETE_WINDOW", self.stop)
+        self.root.wm_protocol("WM_DELETE_WINDOW", self.exit)
+        # self.root.configure(background='#0e1c24')
 
     def video_loop(self):
         try:
-            image = self.convert(self.vs.frame)
+            frame = self.video_stream.frame
+            # image = self.convert(self.video_stream.frame)
             if not self.ai_manager.training:
-                prediction, _ = self.ai_manager.classify_gesture_on_image(image)
-                image = cv2.putText(image, 'Predicted gesture: {}'.format(prediction), (5, 5), cv2.FONT_HERSHEY_SIMPLEX,
-                                    0.5, (0, 255, 0), 1, cv2.LINE_AA)
+                if self.classifying:
+                    prediction, probability = self.ai_manager.classify_gesture_on_image(self.video_stream.frame)
+                    frame = cv2.putText(frame, 'Predicted gesture: {}'.format(prediction), (5, 15),
+                                        self.FONT,
+                                        0.5, (255, 255, 255), 1, cv2.LINE_AA)
+                image = self.convert(frame)
+            else:
+                if self.wait_time == 0:
+                    height, width, _ = frame.shape
+                    frame = cv2.putText(frame, 'Training', (20, 25),
+                                        self.FONT,
+                                        0.5, (255, 255, 255), 1, cv2.LINE_AA)
+                    """frame = cv2.rectangle(frame, (int((width / 2) - 202), 8), (int((width / 2) + 202), 32),
+                                          (72, 56, 27), 2)"""
+                    frame = cv2.rectangle(frame, (int((width / 2) - 202), 8), (int((width / 2) + 202), 32),
+                                          (255, 255, 255), 2)
+                    frame = cv2.rectangle(frame, (int((width / 2) - 200), 10),
+                                          (int((width / 2) + (
+                                                      (8 * (len(self.ai_manager.train_dict.get(self.gesture)) + 1)) - 200)),
+                                           30),
+                                          (169, 151, 58),
+                                          cv2.FILLED)
+                else:
+                    text = str(math.ceil(self.wait_time / 10))
+                    textsize = cv2.getTextSize(text, self.FONT, 5, 5)[0]
+                    textX = (frame.shape[1] - textsize[0]) // 2
+                    textY = (frame.shape[0] + textsize[1]) // 2
+                    frame = cv2.putText(frame, text, (textX, textY), self.FONT, 5, (255, 255, 255), 5 )
+                image = self.convert(frame)
 
             if self.panel is None:
                 self.panel = Label(image=image)
@@ -60,12 +132,17 @@ class Window:
         except RuntimeError as e:
             print("[INFO] caught a RuntimeError!")
 
-        self.root.after(16, self.video_loop)
+        self.root.after(40, self.video_loop)
 
     def save_images(self):
         if self.ai_manager.training:
-            cv2.imwrite('{}/{}/{}.jpg'.format(self.save_location, self.gesture, self.index))
-            self.index += 1
+            if self.wait_time == 0:
+                curr_frame_features = self.ai_manager.inception.get_features_from_image(self.video_stream.frame)
+                self.ai_manager.train_dict.get(self.gesture).append(curr_frame_features)
+                if len(self.ai_manager.train_dict.get(self.gesture)) >= 50:
+                    self.stop_save()
+            else:
+                self.wait_time -= 1
         self.root.after(100, self.save_images)
 
     def convert(self, img):
@@ -76,17 +153,56 @@ class Window:
         return img
 
     def start_clicked(self, gesture):
-        time.sleep(3)
-        self.ai_manager.training = True
-        self.gesture = gesture
+        if not self.ai_manager.training:
+            self.gesture = gesture
+            self.ai_manager.train_dict.get(gesture).clear()
+            self.ai_manager.training = True
 
-    def stop_clicked(self):
-        dict = self.ai_manager.load_images_into_dict(self.save_location)
-        features, classes = self.ai_manager.get_features_and_classes_from_dict(dict)
+    def reset_clicked(self, gesture):
+        self.ai_manager.train_dict.get(gesture).clear()
+        features, classes = self.ai_manager.get_features_and_classes_from_dict(self.ai_manager.train_dict)
         self.ai_manager.knn.train_new_knn_classifier(features, classes)
         self.ai_manager.training = False
 
-    def stop(self):
-        self.vs.stop()
+    def stop_save(self):
+        features, classes = self.ai_manager.get_features_and_classes_from_dict(self.ai_manager.train_dict)
+        self.ai_manager.knn.train_new_knn_classifier(features, classes)
+        self.ai_manager.training = False
+        self.wait_time = 30
+
+    def exit(self):
+        self.video_stream.stop()
         self.root.quit()
         exit(0)
+
+    def start_space_invaders(self):
+        if len(self.txt.get("1.0", END)) == 1:
+            lbl = CustomFontLabel(self.root, text="You need to fill in your id! ", font_path='resources/nidsans-webfont.ttf', size=16,
+                              fg='#ffffff', bg="#ef5332")
+            lbl.grid(column=0, row=9, columnspan=3)
+        else:
+            if not self.classifying:
+                self.classifying = True
+            else:
+                self.classifying = False
+
+
+class CustomFontLabel(Label):
+    def __init__(self, master, text, foreground="black", truetype_font=None, font_path=None, family=None, size=None,
+                 **kwargs):
+        if truetype_font is None:
+            if font_path is None:
+                raise ValueError("Font path can't be None")
+
+            # Initialize font
+            truetype_font = ImageFont.truetype(font_path, size)
+
+        width, height = truetype_font.getsize(text)
+
+        image = Image.new("RGBA", (width, height), color=(0, 0, 0, 0))
+        draw = ImageDraw.Draw(image)
+
+        draw.text((0, 0), text, font=truetype_font, fill=foreground)
+
+        self._photoimage = ImageTk.PhotoImage(image)
+        Label.__init__(self, master, image=self._photoimage, **kwargs)

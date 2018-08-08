@@ -18,4 +18,5 @@ if __name__ == '__main__':
 
     ui = Window(stream, ai_manager, args.folder)
     ui.video_loop()
+    ui.save_images()
     ui.root.mainloop()
