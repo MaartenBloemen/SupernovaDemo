@@ -20,6 +20,7 @@ class Window:
         self.save_location = save_location
 
         self.root = Tk()
+        self.root.attributes("-fullscreen", True)
         self.root.bind('<Escape>', lambda e: self.exit())
 
         # background

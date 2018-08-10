@@ -7,7 +7,7 @@ import time
 
 class SpaceInvaders:
     def __init__(self, ai_manager, video_stream, ui):
-        self.resolution = 2
+        self.resolution = 1.7666666
         self.ai_manager = ai_manager
         self.video_stream = video_stream
         self.ui = ui
@@ -36,7 +36,7 @@ class SpaceInvaders:
                          [1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1],
                          [1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1]]
 
-        self.screen = pygame.display.set_mode((800, 600))
+        self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)      # pygame.display.set_mode((int(800 * self.resolution), int(600 * self.resolution)))
         # background = pygame.image.load("resources/image/background.jpg")
         # self.screen.blit(background, (0, 0))
 
@@ -44,7 +44,7 @@ class SpaceInvaders:
         # self.playerX = 400
         # self.playerY = 550
         self.background = Background("resources/images/background.jpg", [0, 0])
-        self.player = Player("resources/images/ship.png", [400, 550])
+        self.player = Player("resources/images/ship.png", [int(400 * self.resolution), int(550 * self.resolution)])
 
         self.animationOn = 0
         self.direction = 1
@@ -60,7 +60,7 @@ class SpaceInvaders:
         #     2: [pygame.image.load("resources/images/enemy3_1.png").convert_alpha(),
         #         pygame.image.load("resources/images/enemy3_2.png").convert_alpha()],
         # }
-        self.enemySpeed = 20
+        self.enemySpeed = int(20 * self.resolution)
         self.lastEnemyMove = 0
         self.enemies = []
         self.makeEnemies()
@@ -80,19 +80,19 @@ class SpaceInvaders:
         #     self.enemies.append(out)
         self.chance = 990
 
-        barrierX = 50
-        barrierY = 400
-        space = 100
+        barrierX = int(50 * self.resolution)
+        barrierY = int(400 * self.resolution)
+        space = int(100 * self.resolution)
 
         for offset in range(1, 5):
             for b in barrierDesign:
                 for b in b:
                     if b != 0:
                         self.barrierParticles.append(pygame.Rect(barrierX + space * offset, barrierY, 5, 5))
-                    barrierX += 5
-                barrierX = 50 * offset
-                barrierY += 3
-            barrierY = 400
+                    barrierX += int(5 * self.resolution)
+                barrierX = 50 * offset * self.resolution
+                barrierY += 3 * self.resolution
+            barrierY = 400 * self.resolution
 
     def makeEnemies(self):
         for row in range(5):
@@ -105,8 +105,8 @@ class SpaceInvaders:
                 enemy_sprite = ["resources/images/enemy3_1.png", "resources/images/enemy3_2.png"]
             for column in range(10):
                 enemy = Enemy(enemy_sprite[0], enemy_sprite[1], row, column)
-                enemy.rect.x = 157 + (column * 50)
-                enemy.rect.y = 65 + (row * 45)
+                enemy.rect.x = int(157 * self.resolution) + (column * int(50 * self.resolution))
+                enemy.rect.y = int(65 * self.resolution) + (row * int(45 * self.resolution))
                 out.append(enemy)
             self.enemies.append(out)
 
@@ -121,13 +121,13 @@ class SpaceInvaders:
                         self.resetPlayer()
                     enemy.rect.x += self.enemySpeed * self.direction
                     self.lastEnemyMove = 25
-                    if enemy.rect.x >= 750 or enemy.rect.x <= 0:
+                    if enemy.rect.x >= int(750 * self.resolution) or enemy.rect.x <= 0:
                         self.moveEnemiesDown()
                         self.direction *= -1
 
                     chance = random.randint(0, 1000)
                     if chance > self.chance:
-                        self.bullets.append(pygame.Rect(enemy.rect.x, enemy.rect.y, 5, 10))
+                        self.bullets.append(pygame.Rect(enemy.rect.x, enemy.rect.y, int(5*self.resolution), int(10*self.resolution)))
                         self.score += 5
             if self.animationOn:
                 self.animationOn -= 1
@@ -144,13 +144,13 @@ class SpaceInvaders:
 
     def playerUpdate(self, key):
         # key = pygame.key.get_pressed()
-        if key == "right" and self.player.rect.left < 800 - self.player.image.get_width():
+        if key == "right" and self.player.rect.left < (int(800 * self.resolution)) - self.player.image.get_width():
             self.player.rect.left += 5
         elif key == "left" and self.player.rect.left > 0:
             self.player.rect.left -= 5
         if key == "space" and not self.bullet:
             self.bullet = pygame.Rect(self.player.rect.left + self.player.image.get_width() / 2 - 2,
-                                      self.player.rect.top - 15, 5, 10)
+                                      self.player.rect.top - 15, int(5*self.resolution), int(10*self.resolution))
 
     def bulletUpdate(self):
         for i, enemy in enumerate(self.enemies):
@@ -162,13 +162,13 @@ class SpaceInvaders:
                     self.score += 100
 
         if self.bullet:
-            self.bullet.y -= 20
-            if self.bullet.y < 0:
+            self.bullet.y -= int(20 * self.resolution)
+            if self.bullet.y < int(0 * self.resolution):
                 self.bullet = None
 
         for x in self.bullets:
-            x.y += 20
-            if x.y > 600:
+            x.y += int(20 * self.resolution)
+            if x.y > int(600 * self.resolution):
                 self.bullets.remove(x)
             if x.colliderect(
                     pygame.Rect(self.player.rect.left, self.player.rect.top, self.player.image.get_width(),
@@ -189,7 +189,7 @@ class SpaceInvaders:
                 self.score += 10
 
     def resetPlayer(self):
-        self.player.rect.left = 400
+        self.player.rect.left = int(400 * self.resolution)
 
     def run(self):
         clock = pygame.time.Clock()
@@ -202,6 +202,9 @@ class SpaceInvaders:
             for event in pygame.event.get():
                 if event.type == QUIT:
                     self.exit()
+                elif event.type == KEYDOWN:
+                    if event.key == K_ESCAPE:
+                        self.exit()
             for out in self.enemies:
                 for enemy in out:
                     self.screen.blit(enemy.image[self.animationOn],
@@ -243,25 +246,32 @@ class SpaceInvaders:
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, image_file, location):
+        resolution = 1.7666666
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load(image_file).convert_alpha()
+        self.image = pygame.transform.scale(pygame.image.load(image_file).convert_alpha(),
+                                            ((int(50 * resolution)), (int(48 * resolution))))
         self.rect = self.image.get_rect()
         self.rect.left, self.rect.top = location
 
 
 class Background(pygame.sprite.Sprite):
     def __init__(self, image_file, location):
+        resolution = 1.7666666
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load(image_file).convert()
+        self.image = pygame.transform.scale(pygame.image.load(image_file).convert(),
+                                            ((int(800 * resolution)), (int(600 * resolution))))
         self.rect = self.image.get_rect()
         self.rect.left, self.rect.top = location
 
 
 class Enemy(pygame.sprite.Sprite):
     def __init__(self, image_file, image_file2, row, column):
+        resolution = 1.7666666
         pygame.sprite.Sprite.__init__(self)
-        self.image = [pygame.transform.scale(pygame.image.load(image_file).convert_alpha(), (35, 35)),
-                      pygame.transform.scale(pygame.image.load(image_file2).convert_alpha(), (35, 35))]
+        self.image = [pygame.transform.scale(pygame.image.load(image_file).convert_alpha(),
+                                             ((int(35 * resolution)), (int(35 * resolution)))),
+                      pygame.transform.scale(pygame.image.load(image_file2).convert_alpha(), (
+                          (int(35 * resolution)), (int(35 * resolution))))]
         self.row = row
         self.column = column
         self.rect = self.image[0].get_rect()
