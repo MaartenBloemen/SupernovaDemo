@@ -1,5 +1,6 @@
 import argparse
-from user_interface import Window
+from gesture_screen import Window
+from user_interface import GestureScreen
 from webcam import WebcamStream
 from ai_manager import AiManager
 
