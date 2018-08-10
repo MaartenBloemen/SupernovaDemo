@@ -205,6 +205,11 @@ class Window:
             self.root.withdraw()
             SpaceInvaders(self.ai_manager, self.video_stream, self).run()
 
+    def reset(self):
+        self.classifying = False
+        self.txt.delete('1.0', END)
+        self.root.deiconify()
+
 
 class CustomFontLabel(Label):
     def __init__(self, master, text, foreground="black", truetype_font=None, font_path=None, family=None, size=None,
