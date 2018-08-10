@@ -46,7 +46,8 @@ class AiManager:
         predicted_class, probability = self.knn.predict_proba_for_image_features(image_features, self.CLASS_NAMES)
         print('Time to analyze frame: {} ms'.format((time.time() - start) * 1000))
         print(predicted_class, probability)
-        if probability >= self.THRESHOLD:
-            press(predicted_class)
+        # if probability >= self.THRESHOLD:
+        #     # press(predicted_class)
+        #     return predicted_class
 
         return predicted_class, probability

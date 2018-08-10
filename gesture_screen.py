@@ -1,5 +1,6 @@
 from tkinter import *
 from PIL import Image, ImageFont, ImageDraw, ImageTk
+from spaceinvaders_simple import SpaceInvaders
 import math
 import cv2
 import requests
@@ -185,7 +186,7 @@ class Window:
 
     def start_space_invaders(self):
         if len(self.txt.get("1.0", END)) == 1:
-            lbl = CustomFontLabel(self, text="You need to fill in your id! ",
+            lbl = CustomFontLabel(self.root, text="You need to fill in your id! ",
                                   font_path='resources/nidsans-webfont.ttf', size=16,
                                   fg='#ffffff', bg="#ef5332")
             lbl.grid(column=0, row=9, columnspan=3)
@@ -200,6 +201,9 @@ class Window:
                 self.classifying = True
             else:
                 self.classifying = False
+
+            self.root.withdraw()
+            SpaceInvaders(self.ai_manager, self.video_stream, self).run()
 
 
 class CustomFontLabel(Label):

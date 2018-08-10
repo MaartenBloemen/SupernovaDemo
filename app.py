@@ -1,8 +1,8 @@
 import argparse
 from gesture_screen import Window
-from user_interface import GestureScreen
 from webcam import WebcamStream
 from ai_manager import AiManager
+from spaceinvaders_simple import SpaceInvaders
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -14,6 +14,8 @@ if __name__ == '__main__':
 
     stream = WebcamStream(args.video_src)
     stream.start()
+
+    # space_invaders = SpaceInvaders()
 
     ai_manager = AiManager(args.model, args.folder)
 
