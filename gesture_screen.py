@@ -1,4 +1,5 @@
 from tkinter import *
+import tkinter.font as tkFont
 from PIL import Image, ImageFont, ImageDraw, ImageTk
 from spaceinvaders_simple import SpaceInvaders
 import math
@@ -14,14 +15,22 @@ class Window:
     wait_time = 30
     classifying = False
 
+    space_invaders = None
+
     def __init__(self, video_stream, ai_manager, save_location):
         self.ai_manager = ai_manager
         self.video_stream = video_stream
         self.save_location = save_location
 
+        self.resolution = 1.76666
+        self.last_score = 0
+        self.last_id = 0
+        self.ranking = {'-1': -1, '-2': -1, '-3': -1, '-4': -1, '-5': -1}
+
         self.root = Tk()
         self.root.attributes("-fullscreen", True)
         self.root.bind('<Escape>', lambda e: self.exit())
+        self.font = tkFont.Font(family='monospace', size=20, weight='bold')
 
         # background
         # background_image = PhotoImage(file="/home/craftworkz/Documents/SupernovaDemo/resources/bg.png")
@@ -38,60 +47,84 @@ class Window:
 
         self.panel = None
         label = CustomFontLabel(self.root, text="Click the buttons to start and stop recording gestures.",
-                                font_path='resources/nidsans-webfont.ttf', size=22, bg='#51ffff', fg='#1b3848')
-        label.grid(row=0, columnspan=4, padx=10, pady=5, ipady=2.5, ipadx=5)
+                                font_path='resources/nidsans-webfont.ttf', size=30, bg='#51ffff',
+                                fg='#1b3848', width=int(825 * self.resolution))
+        label.grid(row=0, columnspan=3, padx=10, pady=5, ipady=2.5, ipadx=5)
 
         # label and buttons to go left
-        lbl = CustomFontLabel(self.root, text="Gestures to go left", font_path='resources/nidsans-webfont.ttf', size=16,
-                              bg='#95cc71', fg='#1b3848', width=250)
+        lbl = CustomFontLabel(self.root, text="Gestures to go left", font_path='resources/nidsans-webfont.ttf',
+                              bg='#95cc71', fg='#1b3848', width=int(250 * self.resolution))
         lbl.grid(row=1, column=1, columnspan=2, padx=5, sticky=W, ipady=2.5)
 
-        btn = Button(self.root, text="Train!", command=lambda: self.start_clicked('left'), width=5,
+        btn = Button(self.root, text="Train!", command=lambda: self.start_clicked('left'),
+                     width=int(5 * self.resolution), font=self.font,
                      highlightthickness=0, bd=0)
         btn.grid(row=2, column=1)
 
-        btn = Button(self.root, text="Reset!", command=lambda: self.reset_clicked('space'), width=5,
+        btn = Button(self.root, text="Reset!", command=lambda: self.reset_clicked('space'),
+                     width=int(5 * self.resolution), font=self.font,
                      highlightthickness=0, bd=0)
         btn.grid(row=2, column=2)
 
         # label and buttons to go right
         lbl = CustomFontLabel(self.root, text="Gestures to go right", font_path='resources/nidsans-webfont.ttf',
-                              size=16,
-                              bg='#95cc71', fg='#1b3848', width=250)
+                              bg='#95cc71', fg='#1b3848', width=int(250 * self.resolution))
         lbl.grid(row=3, column=1, columnspan=2, padx=5, sticky=W, ipady=2.5)
 
-        btn = Button(self.root, text="Train!", command=lambda: self.start_clicked('right'), width=5,
+        btn = Button(self.root, text="Train!", command=lambda: self.start_clicked('right'),
+                     width=int(5 * self.resolution), font=self.font,
                      highlightthickness=0, bd=0)
         btn.grid(row=4, column=1)
 
-        btn = Button(self.root, text="Reset!", command=lambda: self.reset_clicked('space'), width=5,
+        btn = Button(self.root, text="Reset!", command=lambda: self.reset_clicked('space'),
+                     width=int(5 * self.resolution), font=self.font,
                      highlightthickness=0, bd=0)
         btn.grid(row=4, column=2)
 
         # label and buttons to shoot
-        lbl = CustomFontLabel(self.root, text="Gestures to shoot", font_path='resources/nidsans-webfont.ttf', size=16,
-                              bg='#95cc71', fg='#1b3848', width=250)
+        lbl = CustomFontLabel(self.root, text="Gestures to shoot", font_path='resources/nidsans-webfont.ttf',
+                              bg='#95cc71', fg='#1b3848', width=int(250 * self.resolution))
         lbl.grid(row=5, column=1, columnspan=2, padx=5, sticky=W, ipady=2.5)
 
-        btn = Button(self.root, text="Start!", command=lambda: self.start_clicked('space'), width=5,
+        btn = Button(self.root, text="Start!", command=lambda: self.start_clicked('space'),
+                     width=int(5 * self.resolution), font=self.font,
                      highlightthickness=0, bd=0)
         btn.grid(row=6, column=1)
 
-        btn = Button(self.root, text="Reset!", command=lambda: self.reset_clicked('space'), width=5,
+        btn = Button(self.root, text="Reset!", command=lambda: self.reset_clicked('space'),
+                     width=int(5 * self.resolution), font=self.font,
                      highlightthickness=0, bd=0)
         btn.grid(row=6, column=2)
 
         # id
-        lbl = CustomFontLabel(self.root, text="id: ", font_path='resources/nidsans-webfont.ttf', size=16,
+        lbl = CustomFontLabel(self.root, text="id: ", font_path='resources/nidsans-webfont.ttf',
                               fg='#ffffff', bg="#51ffff")
         lbl.grid(row=10, column=0, sticky=W, padx=10, rowspan=3, pady=10)
-        self.txt = Text(self.root, height=1, width=10)
+        self.txt = Text(self.root, height=1, width=int(7 * self.resolution), font=("Helvetica", 20))
         self.txt.grid(row=10, column=0, sticky=W, padx=50, rowspan=3, pady=10)
 
         # space invader
-        btn = Button(self.root, text="Start space invader", command=self.start_space_invaders, width=50,
+        btn = Button(self.root, text="Start space invader", command=self.start_space_invaders,
+                     width=int(30 * self.resolution), font=self.font,
                      height=2, highlightthickness=0, bd=0, bg="#51ffff")
         btn.grid(row=10, column=0, columnspan=3, rowspan=3, pady=10)
+
+        # last_score
+        lbl = CustomFontLabel(self.root, text="Last score:",
+                              font_path='resources/nidsans-webfont.ttf',
+                              bg='#95cc71', fg='#1b3848', width=int(250 * self.resolution))
+        lbl.grid(row=0, column=3, padx=5, ipady=2.5, sticky=S)
+
+        lbl = CustomFontLabel(self.root, text="{} - {}".format(str(self.last_id), str(self.last_score)),
+                              font_path='resources/nidsans-webfont.ttf',
+                              bg='#95cc71', fg='#1b3848', width=int(250 * self.resolution))
+        lbl.grid(row=1, column=3, padx=5, ipady=2.5, sticky=N)
+        # ranking
+        lbl = CustomFontLabel(self.root, text="TOP-5 RANK:", font_path='resources/nidsans-webfont.ttf',
+                              bg='#95cc71', fg='#1b3848', width=int(250 * self.resolution))
+        lbl.grid(row=2, column=3, padx=5, sticky=S, ipady=2.5, pady=5)
+
+        self.display_ranking()
 
         self.root.wm_title("Supernova: Space invader")
         self.root.wm_protocol("WM_DELETE_WINDOW", self.exit)
@@ -113,10 +146,11 @@ class Window:
                     height, width, _ = frame.shape
                     frame = cv2.putText(frame, 'Training', (20, 25),
                                         self.FONT,
-                                        0.5, (255, 255, 255), 1, cv2.LINE_AA)
+                                        1, (255, 255, 255), 1, cv2.LINE_AA)
                     """frame = cv2.rectangle(frame, (int((width / 2) - 202), 8), (int((width / 2) + 202), 32),
                                           (72, 56, 27), 2)"""
-                    frame = cv2.rectangle(frame, (int((width / 2) - 202), 8), (int((width / 2) + 202), 32),
+                    frame = cv2.rectangle(frame, (int((width / 2) - 202), 8),
+                                          (int((width / 2) + 202), 32),
                                           (255, 255, 255), 2)
                     frame = cv2.rectangle(frame, (int((width / 2) - 200), 10),
                                           (int((width / 2) + (
@@ -129,7 +163,7 @@ class Window:
                     textsize = cv2.getTextSize(text, self.FONT, 5, 5)[0]
                     textX = (frame.shape[1] - textsize[0]) // 2
                     textY = (frame.shape[0] + textsize[1]) // 2
-                    frame = cv2.putText(frame, text, (textX, textY), self.FONT, 5, (255, 255, 255), 5)
+                    frame = cv2.putText(frame, text, (textX, textY), self.FONT, 9, (255, 255, 255), 5)
                 image = self.convert(frame)
 
             if self.panel is None:
@@ -156,7 +190,7 @@ class Window:
         self.root.after(100, self.save_images)
 
     def convert(self, img):
-        img = cv2.resize(img, (640, 480))
+        img = cv2.resize(img, (1000, 750))  # 640/480
         img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         img = Image.fromarray(img)
         img = ImageTk.PhotoImage(img)
@@ -192,28 +226,66 @@ class Window:
                                   fg='#ffffff', bg="#ef5332")
             lbl.grid(column=0, row=9, columnspan=3)
         else:
+
             response = requests.get("http://supernova.madebyartcore.com/api/checkin/[company_id]/[astronaut_id]")
             data = response.json()
             # data["firstname"]
 
-            response = requests.post(
-                "http://supernova.madebyartcore.com/api/checkout/[points]/[company_id]/[astronaut_id]")
             if not self.classifying:
                 self.classifying = True
             else:
                 self.classifying = False
 
             self.root.withdraw()
-            SpaceInvaders(self.ai_manager, self.video_stream, self).run()
+            self.space_invaders = SpaceInvaders(self.ai_manager, self.video_stream, self, self.txt.get("1.0", END)).run()
 
-    def reset(self):
+    def display_ranking(self):
+
+        lbl = CustomFontLabel(self.root, text="{} - {}".format(str(self.last_id).strip(), str(self.last_score)),
+                              font_path='resources/nidsans-webfont.ttf',
+                              bg='#95cc71', fg='#1b3848', width=int(250 * self.resolution))
+        lbl.grid(row=1, column=3, padx=5, ipady=2.5, sticky=N)
+
+        print(self.ranking)
+        print("----------" + str(self.last_score) + "---------")
+        print(str(self.last_id).strip() + "******")
+        # check if the last score is in top 5
+        if sorted(self.ranking.values())[0] < self.last_score:
+            self.ranking[str(self.last_id).strip()] = self.last_score
+            remove_id = sorted(self.ranking, key=self.ranking.__getitem__)[0]
+            del self.ranking[remove_id]
+
+        position = ['N', '', 'S', 'N', '']
+        i = 0
+        for key in sorted(self.ranking, key=self.ranking.__getitem__, reverse=True):
+            if i < 3:
+                print("----------{}".format(key))
+                lbl = CustomFontLabel(self.root, text="{} - {}".format(key, str(self.ranking[key])), font_path='resources/nidsans-webfont.ttf',
+                                      bg='#95cc71', fg='#1b3848', width=int(250 * self.resolution))
+                lbl.grid(row=3, column=3, padx=5, sticky=position[i], ipady=2.5, pady=2.5)
+                i += 1
+            else:
+                print("----------{}".format(key))
+                lbl = CustomFontLabel(self.root, text="{} - {}".format(key, str(self.ranking[key])),
+                                      font_path='resources/nidsans-webfont.ttf',
+                                      bg='#95cc71', fg='#1b3848', width=int(250 * self.resolution))
+                lbl.grid(row=4, column=3, padx=5, sticky=position[i], ipady=2.5, pady=5)
+                i += 1
+
+    def reset(self, astronaut_id, score):
+        self.last_id = astronaut_id
+        self.last_score = score
+        self.display_ranking()
         self.classifying = False
         self.txt.delete('1.0', END)
         self.root.deiconify()
 
 
 class CustomFontLabel(Label):
-    def __init__(self, master, text, foreground="black", truetype_font=None, font_path=None, family=None, size=None,
+    text_size = 25
+
+    def __init__(self, master, text, foreground="black", truetype_font=None, font_path=None, family=None,
+                 size=text_size,
                  **kwargs):
         if truetype_font is None:
             if font_path is None:

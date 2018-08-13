@@ -3,14 +3,17 @@ from pygame.locals import *
 import sys
 import random
 import time
+import requests
 
 
 class SpaceInvaders:
-    def __init__(self, ai_manager, video_stream, ui):
+    def __init__(self, ai_manager, video_stream, ui, astronaut_id):
         self.resolution = 1.7666666
         self.ai_manager = ai_manager
         self.video_stream = video_stream
         self.ui = ui
+
+        self.astronaut_id = astronaut_id
 
         self.score = 0
         self.lives = 1
@@ -238,8 +241,10 @@ class SpaceInvaders:
             pygame.display.flip()
 
     def exit(self):
+        response = requests.post(
+            "http://supernova.madebyartcore.com/api/checkout/[points]/[company_id]/[astronaut_id]")
         time.sleep(2)
-        self.ui.reset()
+        self.ui.reset(self.astronaut_id, self.score)
         # self.ui.video_loop()
         pygame.quit()
 
