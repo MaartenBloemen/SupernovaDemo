@@ -1,6 +1,5 @@
 import pygame
 from pygame.locals import *
-import sys
 import random
 import time
 import requests
@@ -16,7 +15,7 @@ class SpaceInvaders:
         self.astronaut_id = astronaut_id
 
         self.score = 0
-        self.lives = 1
+        self.lives = 3
         pygame.font.init()
         self.font = pygame.font.Font("resources/nidsans-webfont.ttf", 15)
         barrierDesign = [[], [0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0],
@@ -88,8 +87,8 @@ class SpaceInvaders:
         space = int(100 * self.resolution)
 
         for offset in range(1, 5):
-            for b in barrierDesign:
-                for b in b:
+            for a in barrierDesign:
+                for b in a:
                     if b != 0:
                         self.barrierParticles.append(pygame.Rect(barrierX + space * offset, barrierY, 5, 5))
                     barrierX += int(5 * self.resolution)
@@ -143,7 +142,7 @@ class SpaceInvaders:
         for out in self.enemies:
             for enemy in out:
                 # enemy = enemy[1]
-                enemy.rect.y += 20
+                enemy.rect.y += int(20*self.resolution)
 
     def playerUpdate(self, key):
         # key = pygame.key.get_pressed()
@@ -243,7 +242,7 @@ class SpaceInvaders:
     def exit(self):
         response = requests.post(
             "http://supernova.madebyartcore.com/api/checkout/[points]/[company_id]/[astronaut_id]")
-        time.sleep(2)
+        # time.sleep(2)
         self.ui.reset(self.astronaut_id, self.score)
         # self.ui.video_loop()
         pygame.quit()

@@ -13,9 +13,6 @@ class Window:
     training = False
     gesture = None
     wait_time = 30
-    classifying = False
-
-    space_invaders = None
 
     def __init__(self, video_stream, ai_manager, save_location):
         self.ai_manager = ai_manager
@@ -135,11 +132,10 @@ class Window:
             frame = self.video_stream.frame
             # image = self.convert(self.video_stream.frame)
             if not self.ai_manager.training:
-                if self.classifying:
-                    prediction, probability = self.ai_manager.classify_gesture_on_image(self.video_stream.frame)
-                    frame = cv2.putText(frame, 'Predicted gesture: {}'.format(prediction), (5, 15),
-                                        self.FONT,
-                                        0.5, (255, 255, 255), 1, cv2.LINE_AA)
+                prediction, probability = self.ai_manager.classify_gesture_on_image(self.video_stream.frame)
+                frame = cv2.putText(frame, 'Predicted gesture: {}'.format(prediction), (5, 15),
+                                    self.FONT,
+                                    0.5, (255, 255, 255), 1, cv2.LINE_AA)
                 image = self.convert(frame)
             else:
                 if self.wait_time == 0:
@@ -231,13 +227,8 @@ class Window:
             data = response.json()
             # data["firstname"]
 
-            if not self.classifying:
-                self.classifying = True
-            else:
-                self.classifying = False
-
             self.root.withdraw()
-            self.space_invaders = SpaceInvaders(self.ai_manager, self.video_stream, self, self.txt.get("1.0", END)).run()
+            SpaceInvaders(self.ai_manager, self.video_stream, self, self.txt.get("1.0", END)).run()
 
     def display_ranking(self):
 
@@ -246,9 +237,6 @@ class Window:
                               bg='#95cc71', fg='#1b3848', width=int(250 * self.resolution))
         lbl.grid(row=1, column=3, padx=5, ipady=2.5, sticky=N)
 
-        print(self.ranking)
-        print("----------" + str(self.last_score) + "---------")
-        print(str(self.last_id).strip() + "******")
         # check if the last score is in top 5
         if sorted(self.ranking.values())[0] < self.last_score:
             self.ranking[str(self.last_id).strip()] = self.last_score
@@ -259,13 +247,11 @@ class Window:
         i = 0
         for key in sorted(self.ranking, key=self.ranking.__getitem__, reverse=True):
             if i < 3:
-                print("----------{}".format(key))
                 lbl = CustomFontLabel(self.root, text="{} - {}".format(key, str(self.ranking[key])), font_path='resources/nidsans-webfont.ttf',
                                       bg='#95cc71', fg='#1b3848', width=int(250 * self.resolution))
                 lbl.grid(row=3, column=3, padx=5, sticky=position[i], ipady=2.5, pady=2.5)
                 i += 1
             else:
-                print("----------{}".format(key))
                 lbl = CustomFontLabel(self.root, text="{} - {}".format(key, str(self.ranking[key])),
                                       font_path='resources/nidsans-webfont.ttf',
                                       bg='#95cc71', fg='#1b3848', width=int(250 * self.resolution))

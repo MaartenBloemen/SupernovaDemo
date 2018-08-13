@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="2ebfc8de-6c97-40ba-946d-b028e4bacea9" name="Default Changelist" comment="adding images that weren't synced yet.">
+    <list default="true" id="2ebfc8de-6c97-40ba-946d-b028e4bacea9" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gesture_screen.py" beforeDir="false" afterPath="$PROJECT_DIR$/gesture_screen.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/spaceinvaders_simple.py" beforeDir="false" afterPath="$PROJECT_DIR$/spaceinvaders_simple.py" afterDir="false" />
@@ -56,34 +56,35 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="py" value="13885" />
+          <entry key="py" value="14264" />
           <entry key="txt" value="167" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="PLAIN_TEXT" value="167" />
-          <entry key="Python" value="13885" />
+          <entry key="Python" value="14264" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="jpg" value="2" />
           <entry key="png" value="15" />
-          <entry key="py" value="53" />
+          <entry key="py" value="64" />
           <entry key="svg" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="Image" value="17" />
-          <entry key="Python" value="53" />
+          <entry key="Python" value="64" />
           <entry key="SVG" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.vcs.git.usages">
         <counts>
-          <entry key="git.branch.create.new" value="2" />
+          <entry key="git.branch.checkout.local" value="2" />
+          <entry key="git.branch.create.new" value="3" />
         </counts>
       </usages-collector>
     </session>
@@ -93,8 +94,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/spaceinvaders.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="7305">
-              <caret line="491" column="14" selection-start-line="491" selection-start-column="12" selection-end-line="491" selection-end-column="14" />
+            <state relative-caret-position="344">
+              <caret line="627" column="20" selection-start-line="627" selection-start-column="20" selection-end-line="627" selection-end-column="56" />
               <folding>
                 <element signature="e#44#54#0" expanded="true" />
               </folding>
@@ -102,11 +103,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/gesture_screen.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1171">
-              <caret line="45" column="38" selection-start-line="45" selection-start-column="38" selection-end-line="45" selection-end-column="38" />
+            <state relative-caret-position="3704">
+              <caret line="248" column="21" selection-start-line="248" selection-start-column="21" selection-end-line="248" selection-end-column="21" />
               <folding>
                 <element signature="e#0#21#0" expanded="true" />
               </folding>
@@ -115,31 +116,19 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ai_manager.py">
+        <entry file="file://$USER_HOME$/miniconda3/envs/SupernovaDemo/lib/python3.6/site-packages/pygame/sprite.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="60">
-              <caret line="9" column="13" selection-start-line="9" selection-start-column="4" selection-end-line="9" selection-end-column="13" />
+            <state relative-caret-position="692">
+              <caret line="549" column="8" selection-start-line="549" selection-start-column="8" selection-end-line="549" selection-end-column="8" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="210">
-              <caret line="14" column="21" lean-forward="true" selection-start-line="14" selection-start-column="21" selection-end-line="14" selection-end-column="21" />
-              <folding>
-                <element signature="e#0#15#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/spaceinvaders_simple.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-300">
-              <caret line="12" column="8" lean-forward="true" selection-start-line="12" selection-start-column="8" selection-end-line="12" selection-end-column="8" />
+            <state relative-caret-position="330">
+              <caret line="82" column="24" selection-start-line="82" selection-start-column="24" selection-end-line="82" selection-end-column="24" />
               <folding>
                 <element signature="e#0#13#0" expanded="true" />
               </folding>
@@ -158,12 +147,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>tk.end</find>
-      <find>playerUpdate</find>
-      <find>game</find>
-      <find>quit</find>
-      <find>classify_gesture_on_image</find>
-      <find>pygame</find>
       <find>image</find>
       <find>blocker</find>
       <find>barrierDesign</find>
@@ -188,6 +171,12 @@
       <find>video_strea</find>
       <find>ai_manager</find>
       <find>video_stream</find>
+      <find>ai_man</find>
+      <find>ui</find>
+      <find>make</find>
+      <find>colli</find>
+      <find>---</find>
+      <find>make_blockers</find>
     </findStrings>
     <replaceStrings>
       <replace>(self.root,</replace>
@@ -201,7 +190,7 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="combining_nd" />
+        <entry key="$PROJECT_DIR$" value="optimalize_MB" />
       </map>
     </option>
     <option name="SET_USER_NAME_GLOBALLY" value="false" />
@@ -223,8 +212,8 @@
         <option value="$PROJECT_DIR$/app_test.py" />
         <option value="$PROJECT_DIR$/app.py" />
         <option value="$PROJECT_DIR$/ai_manager.py" />
-        <option value="$PROJECT_DIR$/spaceinvaders_simple.py" />
         <option value="$PROJECT_DIR$/gesture_screen.py" />
+        <option value="$PROJECT_DIR$/spaceinvaders_simple.py" />
       </list>
     </option>
   </component>
@@ -382,6 +371,7 @@
         <item itemvalue="Python.app_test" />
         <item itemvalue="Python.user_interface" />
         <item itemvalue="Python.test" />
+        <item itemvalue="Python.app" />
       </list>
     </recent_temporary>
   </component>
@@ -438,7 +428,14 @@
       <option name="project" value="LOCAL" />
       <updated>1533913898911</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="adding images that weren't synced yet.">
+      <created>1534152323774</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1534152323774</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TodoView">
@@ -451,7 +448,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="67" y="25" width="1853" height="1055" extended-state="6" />
+    <frame x="67" y="25" width="1853" height="1055" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.184153" />
@@ -519,20 +516,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="330">
           <caret line="24" selection-start-line="24" selection-end-line="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/miniconda3/envs/SupernovaDemo/lib/python3.6/site-packages/pygame/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3480">
-          <caret line="233" column="4" selection-start-line="233" selection-start-column="4" selection-end-line="233" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/miniconda3/envs/SupernovaDemo/lib/python3.6/site-packages/pygame/sprite.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="197">
-          <caret line="461" selection-start-line="461" selection-end-line="461" />
         </state>
       </provider>
     </entry>
@@ -628,16 +611,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/spaceinvaders.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="7305">
-          <caret line="491" column="14" selection-start-line="491" selection-start-column="12" selection-end-line="491" selection-end-column="14" />
-          <folding>
-            <element signature="e#44#54#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/webcam.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
@@ -662,22 +635,46 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/spaceinvaders_simple.py">
+    <entry file="file://$USER_HOME$/miniconda3/envs/SupernovaDemo/lib/python3.6/site-packages/pygame/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-300">
-          <caret line="12" column="8" lean-forward="true" selection-start-line="12" selection-start-column="8" selection-end-line="12" selection-end-column="8" />
+        <state relative-caret-position="1779">
+          <caret line="313" column="4" selection-start-line="313" selection-start-column="4" selection-end-line="313" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/spaceinvaders.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="344">
+          <caret line="627" column="20" selection-start-line="627" selection-start-column="20" selection-end-line="627" selection-end-column="56" />
           <folding>
-            <element signature="e#0#13#0" expanded="true" />
+            <element signature="e#44#54#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/miniconda3/envs/SupernovaDemo/lib/python3.6/site-packages/pygame/sprite.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="692">
+          <caret line="549" column="8" selection-start-line="549" selection-start-column="8" selection-end-line="549" selection-end-column="8" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/gesture_screen.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1171">
-          <caret line="45" column="38" selection-start-line="45" selection-start-column="38" selection-end-line="45" selection-end-column="38" />
+        <state relative-caret-position="3704">
+          <caret line="248" column="21" selection-start-line="248" selection-start-column="21" selection-end-line="248" selection-end-column="21" />
           <folding>
             <element signature="e#0#21#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/spaceinvaders_simple.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="330">
+          <caret line="82" column="24" selection-start-line="82" selection-start-column="24" selection-end-line="82" selection-end-column="24" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
           </folding>
         </state>
       </provider>
