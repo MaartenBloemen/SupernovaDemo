@@ -20,9 +20,12 @@ class Window:
         self.save_location = save_location
 
         self.resolution = 1.76666
-        self.last_score = 0
+        self.company_id = 0
+        self.last_score = -1
         self.last_id = 0
+        self.last_name = "John"
         self.ranking = {'-1': -1, '-2': -1, '-3': -1, '-4': -1, '-5': -1}
+        self.name_list = {'-1': 'John', '-2': 'Jane', '-3': 'Jo', '-4': 'Jean', '-5': 'Jonas'}
 
         self.root = Tk()
         self.root.attributes("-fullscreen", True)
@@ -30,17 +33,17 @@ class Window:
         self.font = tkFont.Font(family='monospace', size=20, weight='bold')
 
         # background
-        # background_image = PhotoImage(file="/home/craftworkz/Documents/SupernovaDemo/resources/bg.png")
-        # background_label = Label(self.root, image=background_image)
-        # background_label.image = background_image
-        # background_label.place(x=0, y=0, relwidth=1, relheight=1)
+        background_image = PhotoImage(file="/home/craftworkz/Documents/SupernovaDemo/resources/header1.png")
+        background_label = Label(self.root, image=background_image)
+        background_label.image = background_image
+        background_label.place(x=0, y=0, relwidth=1, relheight=1)
 
         # craftworkz logo
         logo = PhotoImage(
-            file="/home/craftworkz/Documents/SupernovaDemo/resources/craftworkz_icon75.png")
+            file="/home/craftworkz/Documents/SupernovaDemo/resources/craftworkz.png")
         logo_lbl = Label(self.root, image=logo)
         logo_lbl.image = logo
-        logo_lbl.grid(row=10, column=2, rowspan=3, padx=5, pady=5, sticky=E)
+        logo_lbl.grid(row=10, column=3, rowspan=3, padx=5, pady=5)
 
         self.panel = None
         label = CustomFontLabel(self.root, text="Click the buttons to start and stop recording gestures.",
@@ -125,7 +128,7 @@ class Window:
 
         self.root.wm_title("Supernova: Space invader")
         self.root.wm_protocol("WM_DELETE_WINDOW", self.exit)
-        self.root.configure(background='#0e1c24')
+        # self.root.configure(background='#0e1c24')
 
     def video_loop(self):
         try:
@@ -156,10 +159,10 @@ class Window:
                                           cv2.FILLED)
                 else:
                     text = str(math.ceil(self.wait_time / 10))
-                    textsize = cv2.getTextSize(text, self.FONT, 5, 5)[0]
-                    textX = (frame.shape[1] - textsize[0]) // 2
-                    textY = (frame.shape[0] + textsize[1]) // 2
-                    frame = cv2.putText(frame, text, (textX, textY), self.FONT, 9, (255, 255, 255), 5)
+                    text_size = cv2.getTextSize(text, self.FONT, 5, 5)[0]
+                    text_x = (frame.shape[1] - text_size[0]) // 2
+                    text_y = (frame.shape[0] + text_size[1]) // 2
+                    frame = cv2.putText(frame, text, (text_x, text_y), self.FONT, 9, (255, 255, 255), 5)
                 image = self.convert(frame)
 
             if self.panel is None:
@@ -171,6 +174,7 @@ class Window:
                 self.panel.image = image
         except RuntimeError as e:
             print("[INFO] caught a RuntimeError!")
+            print(e)
 
         self.root.after(40, self.video_loop)
 
@@ -185,7 +189,8 @@ class Window:
                 self.wait_time -= 1
         self.root.after(100, self.save_images)
 
-    def convert(self, img):
+    @staticmethod
+    def convert(img):
         img = cv2.resize(img, (1000, 750))  # 640/480
         img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         img = Image.fromarray(img)
@@ -222,17 +227,19 @@ class Window:
                                   fg='#ffffff', bg="#ef5332")
             lbl.grid(column=0, row=9, columnspan=3)
         else:
-
-            response = requests.get("http://supernova.madebyartcore.com/api/checkin/[company_id]/[astronaut_id]")
+            astronaut_id = self.txt.get("1.0", END)
+            # company_id, astronaut_id
+            """response = requests.get(
+                "http://supernova.madebyartcore.com/api/checkin/{}/{}".format(self.company_id, astronaut_id))
             data = response.json()
-            # data["firstname"]
-
+            name = data["firstname"] + " " + data["lastname"][:1] + "." """
+            name = "craftworkz"
             self.root.withdraw()
-            SpaceInvaders(self.ai_manager, self.video_stream, self, self.txt.get("1.0", END)).run()
+            SpaceInvaders(self.ai_manager, self.video_stream, self, astronaut_id, name).run()
 
     def display_ranking(self):
 
-        lbl = CustomFontLabel(self.root, text="{} - {}".format(str(self.last_id).strip(), str(self.last_score)),
+        lbl = CustomFontLabel(self.root, text="{} - {}".format(str(self.last_name).strip(), str(self.last_score)),
                               font_path='resources/nidsans-webfont.ttf',
                               bg='#95cc71', fg='#1b3848', width=int(250 * self.resolution))
         lbl.grid(row=1, column=3, padx=5, ipady=2.5, sticky=N)
@@ -240,29 +247,34 @@ class Window:
         # check if the last score is in top 5
         if sorted(self.ranking.values())[0] < self.last_score:
             self.ranking[str(self.last_id).strip()] = self.last_score
+            self.name_list[str(self.last_id).strip()] = self.last_name
             remove_id = sorted(self.ranking, key=self.ranking.__getitem__)[0]
             del self.ranking[remove_id]
+            del self.name_list[remove_id]
 
         position = ['N', '', 'S', 'N', '']
         i = 0
         for key in sorted(self.ranking, key=self.ranking.__getitem__, reverse=True):
             if i < 3:
-                lbl = CustomFontLabel(self.root, text="{} - {}".format(key, str(self.ranking[key])), font_path='resources/nidsans-webfont.ttf',
+                lbl = CustomFontLabel(self.root,
+                                      text="{} - {}".format(str(self.name_list[key]), str(self.ranking[key])),
+                                      font_path='resources/nidsans-webfont.ttf',
                                       bg='#95cc71', fg='#1b3848', width=int(250 * self.resolution))
                 lbl.grid(row=3, column=3, padx=5, sticky=position[i], ipady=2.5, pady=2.5)
                 i += 1
             else:
-                lbl = CustomFontLabel(self.root, text="{} - {}".format(key, str(self.ranking[key])),
+                lbl = CustomFontLabel(self.root,
+                                      text="{} - {}".format(str(self.name_list[key]), str(self.ranking[key])),
                                       font_path='resources/nidsans-webfont.ttf',
                                       bg='#95cc71', fg='#1b3848', width=int(250 * self.resolution))
                 lbl.grid(row=4, column=3, padx=5, sticky=position[i], ipady=2.5, pady=5)
                 i += 1
 
-    def reset(self, astronaut_id, score):
+    def reset(self, astronaut_id, score, name):
         self.last_id = astronaut_id
         self.last_score = score
+        self.last_name = name
         self.display_ranking()
-        self.classifying = False
         self.txt.delete('1.0', END)
         self.root.deiconify()
 
@@ -270,22 +282,19 @@ class Window:
 class CustomFontLabel(Label):
     text_size = 25
 
-    def __init__(self, master, text, foreground="black", truetype_font=None, font_path=None, family=None,
-                 size=text_size,
-                 **kwargs):
-        if truetype_font is None:
+    def __init__(self, master, text, foreground="black", true_type_font=None, font_path=None, size=text_size, **kwargs):
+        if true_type_font is None:
             if font_path is None:
                 raise ValueError("Font path can't be None")
 
             # Initialize font
-            truetype_font = ImageFont.truetype(font_path, size)
-
-        width, height = truetype_font.getsize(text)
+            true_type_font = ImageFont.truetype(font_path, size)
+        width, height = true_type_font.getsize(text)
 
         image = Image.new("RGBA", (width, height), color=(0, 0, 0, 0))
         draw = ImageDraw.Draw(image)
 
-        draw.text((0, 0), text, font=truetype_font, fill=foreground)
+        draw.text((0, 0), text, font=true_type_font, fill=foreground)
 
         self._photoimage = ImageTk.PhotoImage(image)
         Label.__init__(self, master, image=self._photoimage, **kwargs)

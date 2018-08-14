@@ -6,45 +6,29 @@ import requests
 
 
 class SpaceInvaders:
-    def __init__(self, ai_manager, video_stream, ui, astronaut_id):
+    def __init__(self, ai_manager, video_stream, ui, astronaut_id, name):
         self.resolution = 1.7666666
         self.ai_manager = ai_manager
         self.video_stream = video_stream
         self.ui = ui
-
+        self.company_id = 0
         self.astronaut_id = astronaut_id
-
+        self.name = name
         self.score = 0
         self.lives = 3
+
         pygame.font.init()
         self.font = pygame.font.Font("resources/nidsans-webfont.ttf", 15)
-        barrierDesign = [[], [0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0],
-                         [0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0],
-                         [0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0],
-                         [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
-                         [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
-                         [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-                         [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-                         [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-                         [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-                         [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-                         [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-                         [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-                         [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-                         [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-                         [1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1],
-                         [1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1],
-                         [1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1],
-                         [1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1],
-                         [1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1]]
+        barrier_design = [[],
+                          [1, 1, 1, 1, 1, 1, 1, 1, 1],
+                          [1, 1, 1, 1, 1, 1, 1, 1, 1],
+                          [1, 1, 1, 1, 1, 1, 1, 1, 1],
+                          [1, 1, 1, 1, 1, 1, 1, 1, 1],
+                          [1, 1, 1, 1, 1, 1, 1, 1, 1]]
 
-        self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)      # pygame.display.set_mode((int(800 * self.resolution), int(600 * self.resolution)))
-        # background = pygame.image.load("resources/image/background.jpg")
-        # self.screen.blit(background, (0, 0))
+        # self.screen = pygame.display.set_mode((int(800 * self.resolution), int(600 * self.resolution)))
+        self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 
-        # self.player = pygame.image.load("resources/images/ship.png").convert_alpha()
-        # self.playerX = 400
-        # self.playerY = 550
         self.background = Background("resources/images/background.jpg", [0, 0])
         self.player = Player("resources/images/ship.png", [int(400 * self.resolution), int(550 * self.resolution)])
 
@@ -54,49 +38,30 @@ class SpaceInvaders:
         self.bullet = None
         self.bullets = []
 
-        # self.enemySprites = {
-        #     0: [pygame.image.load("resources/images/enemy1_1.png").convert_alpha(),
-        #         pygame.image.load("resources/images/enemy1_2.png").convert_alpha()],
-        #     1: [pygame.image.load("resources/images/enemy2_1.png").convert_alpha(),
-        #         pygame.image.load("resources/images/enemy2_2.png").convert_alpha()],
-        #     2: [pygame.image.load("resources/images/enemy3_1.png").convert_alpha(),
-        #         pygame.image.load("resources/images/enemy3_2.png").convert_alpha()],
-        # }
         self.enemySpeed = int(20 * self.resolution)
         self.lastEnemyMove = 0
         self.enemies = []
-        self.makeEnemies()
+        self.make_enemies()
         self.barrierParticles = []
-        # startY = 50
-        # startX = 50
-        # for rows in range(6):
-        #     out = []
-        #     if rows < 2:
-        #         enemy = 0
-        #     elif rows < 4:
-        #         enemy = 1
-        #     else:
-        #         enemy = 2
-        #     for columns in range(10):
-        #         out.append((enemy, pygame.Rect(startX * columns, startY * rows, 35, 35)))
-        #     self.enemies.append(out)
-        self.chance = 990
+        self.chance = 985
 
-        barrierX = int(50 * self.resolution)
-        barrierY = int(400 * self.resolution)
+        barrier_x = int(50 * self.resolution)
+        barrier_y = int(425 * self.resolution)
         space = int(100 * self.resolution)
 
         for offset in range(1, 5):
-            for a in barrierDesign:
+            for a in barrier_design:
                 for b in a:
                     if b != 0:
-                        self.barrierParticles.append(pygame.Rect(barrierX + space * offset, barrierY, 5, 5))
-                    barrierX += int(5 * self.resolution)
-                barrierX = 50 * offset * self.resolution
-                barrierY += 3 * self.resolution
-            barrierY = 400 * self.resolution
+                        self.barrierParticles.append(
+                            pygame.Rect(barrier_x + space * offset, barrier_y, int(10 * self.resolution),
+                                        int(10 * self.resolution)))
+                    barrier_x += int(10 * self.resolution)
+                barrier_x = int(50 * offset * self.resolution)
+                barrier_y += int(10 * self.resolution)
+            barrier_y = int(425 * self.resolution)
 
-    def makeEnemies(self):
+    def make_enemies(self):
         for row in range(5):
             out = []
             if row < 2:
@@ -112,7 +77,7 @@ class SpaceInvaders:
                 out.append(enemy)
             self.enemies.append(out)
 
-    def enemyUpdate(self):
+    def enemy_update(self):
         if not self.lastEnemyMove:
             for out in self.enemies:
                 for enemy in out:
@@ -120,16 +85,17 @@ class SpaceInvaders:
                             pygame.Rect(self.player.rect.left, self.player.rect.top, self.player.image.get_width(),
                                         self.player.image.get_height())):
                         self.lives -= 1
-                        self.resetPlayer()
+                        self.reset_player()
                     enemy.rect.x += self.enemySpeed * self.direction
                     self.lastEnemyMove = 25
                     if enemy.rect.x >= int(750 * self.resolution) or enemy.rect.x <= 0:
-                        self.moveEnemiesDown()
+                        self.move_enemies_down()
                         self.direction *= -1
 
                     chance = random.randint(0, 1000)
                     if chance > self.chance:
-                        self.bullets.append(pygame.Rect(enemy.rect.x, enemy.rect.y, int(5*self.resolution), int(10*self.resolution)))
+                        self.bullets.append(pygame.Rect(enemy.rect.x, enemy.rect.y, int(5 * self.resolution),
+                                                        int(10 * self.resolution)))
                         self.score += 5
             if self.animationOn:
                 self.animationOn -= 1
@@ -138,25 +104,23 @@ class SpaceInvaders:
         else:
             self.lastEnemyMove -= 1
 
-    def moveEnemiesDown(self):
+    def move_enemies_down(self):
         for out in self.enemies:
             for enemy in out:
-                # enemy = enemy[1]
-                enemy.rect.y += int(20*self.resolution)
+                enemy.rect.y += int(20 * self.resolution)
 
-    def playerUpdate(self, key):
-        # key = pygame.key.get_pressed()
+    def player_update(self, key):
         if key == "right" and self.player.rect.left < (int(800 * self.resolution)) - self.player.image.get_width():
             self.player.rect.left += 5
         elif key == "left" and self.player.rect.left > 0:
             self.player.rect.left -= 5
         if key == "space" and not self.bullet:
             self.bullet = pygame.Rect(self.player.rect.left + self.player.image.get_width() / 2 - 2,
-                                      self.player.rect.top - 15, int(5*self.resolution), int(10*self.resolution))
+                                      self.player.rect.top - 15, int(5 * self.resolution), int(10 * self.resolution))
 
-    def bulletUpdate(self):
-        for i, enemy in enumerate(self.enemies):
-            for j, enemy in enumerate(enemy):
+    def bullet_update(self):
+        for i, e in enumerate(self.enemies):
+            for j, enemy in enumerate(e):
                 if self.bullet and enemy.rect.colliderect(self.bullet):
                     self.enemies[i].pop(j)
                     self.bullet = None
@@ -177,7 +141,7 @@ class SpaceInvaders:
                                 self.player.image.get_height())):
                 self.lives -= 1
                 self.bullets.remove(x)
-                self.resetPlayer()
+                self.reset_player()
 
         for b in self.barrierParticles:
             check = b.collidelist(self.bullets)
@@ -190,13 +154,13 @@ class SpaceInvaders:
                 self.bullet = None
                 self.score += 10
 
-    def resetPlayer(self):
+    def reset_player(self):
         self.player.rect.left = int(400 * self.resolution)
 
     def run(self):
         clock = pygame.time.Clock()
         for x in range(3):
-            self.moveEnemiesDown()
+            self.move_enemies_down()
         while True:
             clock.tick(60)
             self.screen.fill((0, 0, 0))
@@ -220,31 +184,46 @@ class SpaceInvaders:
             for b in self.barrierParticles:
                 pygame.draw.rect(self.screen, (52, 255, 0), b)
 
-            if not self.enemies:
+            if not self.enemies[0] and not self.enemies[1] and not self.enemies[2] and not self.enemies[3] and not \
+                    self.enemies[4]:
                 self.screen.blit(
-                    pygame.font.Font("resources/nidsans-webfont.ttf", 100).render("You Win!", -1, (52, 255, 0)),
-                    (100, 200))
+                    pygame.font.Font("resources/nidsans-webfont.ttf", 100).render(
+                        "You Win!", -1, (52, 255, 0)),
+                    (int(225 * self.resolution), int(175 * self.resolution)))
+                self.screen.blit(
+                    pygame.font.Font("resources/nidsans-webfont.ttf", 50).render(
+                        "Well done, astronaut {}".format(self.name), -1, (52, 255, 0)),
+                    (int(175 * self.resolution), int(250 * self.resolution)))
+                pygame.display.flip()
+                self.exit()
             elif self.lives > 0:
-                self.bulletUpdate()
-                self.enemyUpdate()
+                self.bullet_update()
+                self.enemy_update()
                 prediction, probability = self.ai_manager.classify_gesture_on_image(self.video_stream.frame)
                 if probability > 0.8:
-                    self.playerUpdate(prediction)
-            elif self.lives == 0:
+                    self.player_update(prediction)
+            elif self.lives <= 0:
+                self.screen.blit(self.background.image, self.background.rect)
+                self.screen.blit(pygame.font.Font("resources/nidsans-webfont.ttf", 100).render(
+                    "You Lose!", -1, (52, 255, 0)),
+                    (int(225 * self.resolution), int(175 * self.resolution)))
                 self.screen.blit(
-                    pygame.font.Font("resources/nidsans-webfont.ttf", 100).render("You Lose!", -1, (52, 255, 0)),
-                    (100, 200))
+                    pygame.font.Font("resources/nidsans-webfont.ttf", 100).render(
+                        "{} - {}".format(self.name, self.score), -1, (52, 255, 0)),
+                    (int(175 * self.resolution), int(225 * self.resolution)))
+                pygame.display.flip()
                 self.exit()
             self.screen.blit(self.font.render("Lives: {}".format(self.lives), -1, (255, 255, 255)), (20, 10))
             self.screen.blit(self.font.render("Score: {}".format(self.score), -1, (255, 255, 255)), (400, 10))
             pygame.display.flip()
 
     def exit(self):
-        response = requests.post(
-            "http://supernova.madebyartcore.com/api/checkout/[points]/[company_id]/[astronaut_id]")
-        # time.sleep(2)
-        self.ui.reset(self.astronaut_id, self.score)
-        # self.ui.video_loop()
+        # points / company_id / astronaut_id
+        """response = requests.post(
+            "http://supernova.madebyartcore.com/api/checkout/{}/{}/{}".format(self.score, self.company_id,
+                                                                              self.astronaut_id))"""
+        time.sleep(2)
+        self.ui.reset(self.astronaut_id, self.score, self.name)
         pygame.quit()
 
 

@@ -3,7 +3,30 @@
   <component name="ChangeListManager">
     <list default="true" id="2ebfc8de-6c97-40ba-946d-b028e4bacea9" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/a1_0.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/a1_1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/a2_0.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/a2_1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/a3_0.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/a3_1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/shooter.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/space_invaders.ttf" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/gesture_screen.py" beforeDir="false" afterPath="$PROJECT_DIR$/gesture_screen.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/astronaut.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/bg.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/bg.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/craftworkz_icon75.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sounds/0.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sounds/1.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sounds/2.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sounds/3.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sounds/invaderkilled.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sounds/mysteryentered.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sounds/mysterykilled.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sounds/shipexplosion.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sounds/shoot.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sounds/shoot2.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/spaceinvaders.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/spaceinvaders_simple.py" beforeDir="false" afterPath="$PROJECT_DIR$/spaceinvaders_simple.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -46,38 +69,41 @@
     <session id="417611529">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="7" />
+          <entry key="project.closed" value="8" />
           <entry key="project.open.time.0" value="5" />
           <entry key="project.open.time.2" value="1" />
           <entry key="project.open.time.3" value="1" />
-          <entry key="project.open.time.4" value="2" />
-          <entry key="project.opened" value="9" />
+          <entry key="project.open.time.4" value="5" />
+          <entry key="project.opened" value="12" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="py" value="14264" />
-          <entry key="txt" value="167" />
+          <entry key="dummy" value="6" />
+          <entry key="py" value="15735" />
+          <entry key="txt" value="198" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="PLAIN_TEXT" value="167" />
-          <entry key="Python" value="14264" />
+          <entry key="PLAIN_TEXT" value="204" />
+          <entry key="Python" value="15735" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="jpg" value="2" />
-          <entry key="png" value="15" />
-          <entry key="py" value="64" />
+          <entry key="md" value="1" />
+          <entry key="png" value="18" />
+          <entry key="py" value="68" />
           <entry key="svg" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="Image" value="17" />
-          <entry key="Python" value="64" />
+          <entry key="Image" value="20" />
+          <entry key="Markdown" value="1" />
+          <entry key="Python" value="68" />
           <entry key="SVG" value="1" />
         </counts>
       </usages-collector>
@@ -92,13 +118,20 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/spaceinvaders.py">
+        <entry file="file://$PROJECT_DIR$/README.md">
+          <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+            <state split_layout="SPLIT">
+              <first_editor />
+              <second_editor />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/webcam.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="344">
-              <caret line="627" column="20" selection-start-line="627" selection-start-column="20" selection-end-line="627" selection-end-column="56" />
-              <folding>
-                <element signature="e#44#54#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="330">
+              <caret line="23" column="27" selection-start-line="23" selection-start-column="27" selection-end-line="23" selection-end-column="27" />
             </state>
           </provider>
         </entry>
@@ -106,8 +139,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/gesture_screen.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3704">
-              <caret line="248" column="21" selection-start-line="248" selection-start-column="21" selection-end-line="248" selection-end-column="21" />
+            <state relative-caret-position="3903">
+              <caret line="290" column="64" selection-start-line="290" selection-start-column="64" selection-end-line="290" selection-end-column="64" />
               <folding>
                 <element signature="e#0#21#0" expanded="true" />
               </folding>
@@ -116,19 +149,10 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$USER_HOME$/miniconda3/envs/SupernovaDemo/lib/python3.6/site-packages/pygame/sprite.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="692">
-              <caret line="549" column="8" selection-start-line="549" selection-start-column="8" selection-end-line="549" selection-end-column="8" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/spaceinvaders_simple.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="330">
-              <caret line="82" column="24" selection-start-line="82" selection-start-column="24" selection-end-line="82" selection-end-column="24" />
+            <state relative-caret-position="180">
+              <caret line="24" column="54" lean-forward="true" selection-start-line="24" selection-start-column="54" selection-end-line="24" selection-end-column="54" />
               <folding>
                 <element signature="e#0#13#0" expanded="true" />
               </folding>
@@ -147,7 +171,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>image</find>
       <find>blocker</find>
       <find>barrierDesign</find>
       <find>self.player</find>
@@ -177,6 +200,7 @@
       <find>colli</find>
       <find>---</find>
       <find>make_blockers</find>
+      <find>collide</find>
     </findStrings>
     <replaceStrings>
       <replace>(self.root,</replace>
@@ -212,8 +236,8 @@
         <option value="$PROJECT_DIR$/app_test.py" />
         <option value="$PROJECT_DIR$/app.py" />
         <option value="$PROJECT_DIR$/ai_manager.py" />
-        <option value="$PROJECT_DIR$/gesture_screen.py" />
         <option value="$PROJECT_DIR$/spaceinvaders_simple.py" />
+        <option value="$PROJECT_DIR$/gesture_screen.py" />
       </list>
     </option>
   </component>
@@ -239,7 +263,7 @@
             <path>
               <item name="SupernovaDemo" type="b2602c69:ProjectViewProjectNode" />
               <item name="SupernovaDemo" type="462c0819:PsiDirectoryNode" />
-              <item name="inception-2015-12-05" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -435,7 +459,14 @@
       <option name="project" value="LOCAL" />
       <updated>1534152323774</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="improving the layout">
+      <created>1534162091420</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1534162091420</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TodoView">
@@ -448,15 +479,15 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="67" y="25" width="1853" height="1055" extended-state="7" />
+    <frame x="67" y="25" width="1853" height="1055" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.184153" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.184153" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32972974" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49945354" visible="true" weight="0.32864866" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49945354" weight="0.32864866" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -506,7 +537,8 @@
     <MESSAGE value="adding the better graphics." />
     <MESSAGE value="adding fullscreen-mode" />
     <MESSAGE value="adding images that weren't synced yet." />
-    <option name="LAST_COMMIT_MESSAGE" value="adding images that weren't synced yet." />
+    <MESSAGE value="improving the layout" />
+    <option name="LAST_COMMIT_MESSAGE" value="improving the layout" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/rand.py" />
@@ -528,9 +560,6 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/resources/craftworkz_icon.svg" />
     <entry file="file://$PROJECT_DIR$/resources/craftworkz_icon.png" />
-    <entry file="file://$PROJECT_DIR$/resources/astronaut.png">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/inception_classifier.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="360">
@@ -611,20 +640,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/webcam.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="5" column="8" selection-start-line="5" selection-start-column="8" selection-end-line="5" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="210">
           <caret line="14" column="21" lean-forward="true" selection-start-line="14" selection-start-column="21" selection-end-line="14" selection-end-column="21" />
-          <folding>
-            <element signature="e#0#15#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -642,40 +661,71 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/spaceinvaders.py">
+    <entry file="file://$PROJECT_DIR$/resources/craftworkz.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/header.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$USER_HOME$/.PyCharmCE2018.2/system/python_stubs/-1395022637/pygame/rect.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="344">
-          <caret line="627" column="20" selection-start-line="627" selection-start-column="20" selection-end-line="627" selection-end-column="56" />
-          <folding>
-            <element signature="e#44#54#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="189">
+          <caret line="52" column="8" selection-start-line="52" selection-start-column="8" selection-end-line="52" selection-end-column="8" />
         </state>
       </provider>
     </entry>
     <entry file="file://$USER_HOME$/miniconda3/envs/SupernovaDemo/lib/python3.6/site-packages/pygame/sprite.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="692">
+        <state relative-caret-position="764">
           <caret line="549" column="8" selection-start-line="549" selection-start-column="8" selection-end-line="549" selection-end-column="8" />
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/spaceinvaders_simple.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="24" column="54" lean-forward="true" selection-start-line="24" selection-start-column="54" selection-end-line="24" selection-end-column="54" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/astronaut.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
     <entry file="file://$PROJECT_DIR$/gesture_screen.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3704">
-          <caret line="248" column="21" selection-start-line="248" selection-start-column="21" selection-end-line="248" selection-end-column="21" />
+        <state relative-caret-position="3903">
+          <caret line="290" column="64" selection-start-line="290" selection-start-column="64" selection-end-line="290" selection-end-column="64" />
           <folding>
             <element signature="e#0#21#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/spaceinvaders_simple.py">
+    <entry file="file://$PROJECT_DIR$/spaceinvaders.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="281">
+          <caret line="186" column="49" selection-start-line="186" selection-start-column="43" selection-end-line="186" selection-end-column="49" />
+          <folding>
+            <element signature="e#44#54#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor />
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/webcam.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="330">
-          <caret line="82" column="24" selection-start-line="82" selection-start-column="24" selection-end-line="82" selection-end-column="24" />
-          <folding>
-            <element signature="e#0#13#0" expanded="true" />
-          </folding>
+          <caret line="23" column="27" selection-start-line="23" selection-start-column="27" selection-end-line="23" selection-end-column="27" />
         </state>
       </provider>
     </entry>
