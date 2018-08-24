@@ -1,8 +1,8 @@
 import argparse
-from gesture_screen import Window
+# from gesture_screen import Window
 from webcam import WebcamStream
-from ai_manager import AiManager
-from spaceinvaders_simple import SpaceInvaders
+# from ai_manager import AiManager
+from ranking_screen import RankingWindow
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -15,11 +15,13 @@ if __name__ == '__main__':
     stream = WebcamStream(args.video_src)
     stream.start()
 
-    # space_invaders = SpaceInvaders()
+    # ai_manager = AiManager(args.model, args.folder)
+    #
+    # ui = Window(stream, ai_manager, args.folder)
+    # ui.video_loop()
+    # ui.save_images()
+    # ui.root.mainloop()
 
-    ai_manager = AiManager(args.model, args.folder)
-
-    ui = Window(stream, ai_manager, args.folder)
-    ui.video_loop()
-    ui.save_images()
-    ui.root.mainloop()
+    rank = RankingWindow(stream)
+    rank.video_loop()
+    rank.root.mainloop()
