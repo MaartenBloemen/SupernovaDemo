@@ -26,8 +26,9 @@ class SpaceInvaders:
                           [1, 1, 1, 1, 1, 1, 1, 1, 1],
                           [1, 1, 1, 1, 1, 1, 1, 1, 1]]
 
-        # self.screen = pygame.display.set_mode((int(800 * self.resolution), int(600 * self.resolution)))
-        self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+        # self.screen = pygame.display.set_mode((int(800 * self.resolution), int(600 * self.resolution)), RESIZABLE)
+        self.screen = pygame.display.set_mode((1920, 1080), RESIZABLE)
+        # self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 
         self.background = Background("resources/images/background.jpg", [0, 0])
         self.player = Player("resources/images/ship.png", [int(400 * self.resolution), int(550 * self.resolution)])
