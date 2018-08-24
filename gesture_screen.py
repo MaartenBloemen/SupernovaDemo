@@ -5,6 +5,8 @@ from spaceinvaders_simple import SpaceInvaders
 import math
 import cv2
 import requests
+import json
+import datetime
 
 
 class Window:
@@ -20,15 +22,13 @@ class Window:
         self.save_location = save_location
 
         self.resolution = 1.76666
-        self.company_id = 0
+        self.company_id = "LNXOG3I5"
         self.last_score = -1
-        self.last_id = 0
-        self.last_name = "John"
-        self.ranking = {'-1': -1, '-2': -1, '-3': -1, '-4': -1, '-5': -1}
-        self.name_list = {'-1': 'John', '-2': 'Jane', '-3': 'Jo', '-4': 'Jean', '-5': 'Jonas'}
+        self.last_id = "5b7d6f2de6879"
+        self.last_name = "John doe"
 
         self.root = Tk()
-        self.root.attributes("-fullscreen", True)
+        # self.root.attributes("-FULLSCREEN", True)
         self.root.bind('<Escape>', lambda e: self.exit())
         self.font = tkFont.Font(family='monospace', size=20, weight='bold')
 
@@ -43,86 +43,86 @@ class Window:
             file="/home/craftworkz/Documents/SupernovaDemo/resources/craftworkz.png")
         logo_lbl = Label(self.root, image=logo)
         logo_lbl.image = logo
-        logo_lbl.grid(row=10, column=3, rowspan=3, padx=5, pady=5)
+        logo_lbl.grid(row=14, column=3, rowspan=3, columnspan=2, padx=10, pady=10)
 
         self.panel = None
         label = CustomFontLabel(self.root, text="Click the buttons to start and stop recording gestures.",
                                 font_path='resources/nidsans-webfont.ttf', size=30, bg='#51ffff',
-                                fg='#1b3848', width=int(825 * self.resolution))
-        label.grid(row=0, columnspan=3, padx=10, pady=5, ipady=2.5, ipadx=5)
+                                fg='#1b3848', width=1920)
+        label.grid(row=0, columnspan=5, pady=5, ipady=5)
 
         # label and buttons to go left
         lbl = CustomFontLabel(self.root, text="Gestures to go left", font_path='resources/nidsans-webfont.ttf',
-                              bg='#95cc71', fg='#1b3848', width=int(250 * self.resolution))
-        lbl.grid(row=1, column=1, columnspan=2, padx=5, sticky=W, ipady=2.5)
+                              bg='#95cc71', fg='#1b3848', width=300)
+        lbl.grid(row=1, column=1, columnspan=2, ipady=5, padx=15, sticky=N+S+E+W)
 
         btn = Button(self.root, text="Train!", command=lambda: self.start_clicked('left'),
-                     width=int(5 * self.resolution), font=self.font,
+                     width=8, font=self.font,
                      highlightthickness=0, bd=0)
         btn.grid(row=2, column=1)
 
         btn = Button(self.root, text="Reset!", command=lambda: self.reset_clicked('space'),
-                     width=int(5 * self.resolution), font=self.font,
+                     width=8, font=self.font,
                      highlightthickness=0, bd=0)
         btn.grid(row=2, column=2)
 
         # label and buttons to go right
         lbl = CustomFontLabel(self.root, text="Gestures to go right", font_path='resources/nidsans-webfont.ttf',
-                              bg='#95cc71', fg='#1b3848', width=int(250 * self.resolution))
-        lbl.grid(row=3, column=1, columnspan=2, padx=5, sticky=W, ipady=2.5)
+                              bg='#95cc71', fg='#1b3848', width=300)
+        lbl.grid(row=6, column=1, columnspan=2, ipady=5, padx=15, sticky=N+S+E+W)
 
         btn = Button(self.root, text="Train!", command=lambda: self.start_clicked('right'),
-                     width=int(5 * self.resolution), font=self.font,
+                     width=8, font=self.font,
                      highlightthickness=0, bd=0)
-        btn.grid(row=4, column=1)
+        btn.grid(row=7, column=1)
 
         btn = Button(self.root, text="Reset!", command=lambda: self.reset_clicked('space'),
-                     width=int(5 * self.resolution), font=self.font,
+                     width=8, font=self.font,
                      highlightthickness=0, bd=0)
-        btn.grid(row=4, column=2)
+        btn.grid(row=7, column=2)
 
         # label and buttons to shoot
         lbl = CustomFontLabel(self.root, text="Gestures to shoot", font_path='resources/nidsans-webfont.ttf',
-                              bg='#95cc71', fg='#1b3848', width=int(250 * self.resolution))
-        lbl.grid(row=5, column=1, columnspan=2, padx=5, sticky=W, ipady=2.5)
+                              bg='#95cc71', fg='#1b3848', width=300)
+        lbl.grid(row=11, column=1, columnspan=2, ipady=5, padx=15, sticky=N+S+E+W)
 
         btn = Button(self.root, text="Train!", command=lambda: self.start_clicked('space'),
-                     width=int(5 * self.resolution), font=self.font,
+                     width=8, font=self.font,
                      highlightthickness=0, bd=0)
-        btn.grid(row=6, column=1)
+        btn.grid(row=12, column=1)
 
         btn = Button(self.root, text="Reset!", command=lambda: self.reset_clicked('space'),
-                     width=int(5 * self.resolution), font=self.font,
+                     width=8, font=self.font,
                      highlightthickness=0, bd=0)
-        btn.grid(row=6, column=2)
+        btn.grid(row=12, column=2)
 
         # id
-        lbl = CustomFontLabel(self.root, text="id: ", font_path='resources/nidsans-webfont.ttf',
-                              fg='#ffffff', bg="#51ffff")
-        lbl.grid(row=10, column=0, sticky=W, padx=10, rowspan=3, pady=10)
-        self.txt = Text(self.root, height=1, width=int(7 * self.resolution), font=("Helvetica", 20))
-        self.txt.grid(row=10, column=0, sticky=W, padx=50, rowspan=3, pady=10)
+        lbl = CustomFontLabel(self.root, text="             astronaut id: ", size=30, font_path='resources/nidsans-webfont.ttf',
+                              bg='#0e1c24', foreground='#3a97a9', anchor='w')
+        lbl.grid(row=14, column=0, sticky=W + E + N + S, ipadx=20)
+        self.txt = Text(self.root, height=1, width=15, font=("Helvetica", 25))
+        self.txt.grid(row=14, column=0)
 
         # space invader
+        lbl = CustomFontLabel(self.root, text=" ", size=30,
+                              font_path='resources/nidsans-webfont.ttf',
+                              bg='#0e1c24', foreground='#3a97a9', anchor='w')
+        lbl.grid(row=15, column=0, sticky=W + E + N + S, ipadx=20)
         btn = Button(self.root, text="Start space invader", command=self.start_space_invaders,
-                     width=int(30 * self.resolution), font=self.font,
-                     height=2, highlightthickness=0, bd=0, bg="#51ffff")
-        btn.grid(row=10, column=0, columnspan=3, rowspan=3, pady=10)
+                     width=30, font=self.font,
+                     highlightthickness=0, bd=0, bg="#51ffff")
+        btn.grid(row=15, column=0)
 
         # last_score
-        lbl = CustomFontLabel(self.root, text="Last score:",
+        lbl = CustomFontLabel(self.root, text="Last score:", size=40,
                               font_path='resources/nidsans-webfont.ttf',
-                              bg='#95cc71', fg='#1b3848', width=int(250 * self.resolution))
-        lbl.grid(row=0, column=3, padx=5, ipady=2.5, sticky=S)
+                              bg='#95cc71', foreground='#0e1c24', width=550)
+        lbl.grid(row=1, column=3, columnspan=2, sticky=N + S, padx=10)
 
-        lbl = CustomFontLabel(self.root, text="{} - {}".format(str(self.last_id), str(self.last_score)),
-                              font_path='resources/nidsans-webfont.ttf',
-                              bg='#95cc71', fg='#1b3848', width=int(250 * self.resolution))
-        lbl.grid(row=1, column=3, padx=5, ipady=2.5, sticky=N)
         # ranking
-        lbl = CustomFontLabel(self.root, text="TOP-5 RANK:", font_path='resources/nidsans-webfont.ttf',
-                              bg='#95cc71', fg='#1b3848', width=int(250 * self.resolution))
-        lbl.grid(row=2, column=3, padx=5, sticky=S, ipady=2.5, pady=5)
+        lbl = CustomFontLabel(self.root, text="TOP-5 RANK TODAY:", size=40, font_path='resources/nidsans-webfont.ttf',
+                              bg='#95cc71', foreground='#0e1c24', width=550)
+        lbl.grid(row=7, column=3, columnspan=2, sticky=N + S, padx=10)
 
         self.display_ranking()
 
@@ -168,7 +168,7 @@ class Window:
             if self.panel is None:
                 self.panel = Label(image=image)
                 self.panel.image = image
-                self.panel.grid(row=1, rowspan=6, padx=10, pady=10)
+                self.panel.grid(row=1, rowspan=12, padx=10, pady=10)
             else:
                 self.panel.configure(image=image)
                 self.panel.image = image
@@ -225,50 +225,98 @@ class Window:
             lbl = CustomFontLabel(self.root, text="You need to fill in your id! ",
                                   font_path='resources/nidsans-webfont.ttf', size=16,
                                   fg='#ffffff', bg="#ef5332")
-            lbl.grid(column=0, row=9, columnspan=3)
+            lbl.grid(column=0, row=14, columnspan=3)
         else:
             astronaut_id = self.txt.get("1.0", END)
             # company_id, astronaut_id
             """response = requests.get(
                 "http://supernova.madebyartcore.com/api/checkin/{}/{}".format(self.company_id, astronaut_id))
             data = response.json()
-            name = data["firstname"] + " " + data["lastname"][:1] + "." """
+            name = data["firstname"] + " " + data["lastname" """
             name = "craftworkz"
             self.root.withdraw()
             SpaceInvaders(self.ai_manager, self.video_stream, self, astronaut_id, name).run()
 
     def display_ranking(self):
+        now = datetime.datetime.now()
 
-        lbl = CustomFontLabel(self.root, text="{} - {}".format(str(self.last_name).strip(), str(self.last_score)),
+        lbl = CustomFontLabel(self.root, text="{}".format(str(self.last_name).strip()),
                               font_path='resources/nidsans-webfont.ttf',
-                              bg='#95cc71', fg='#1b3848', width=int(250 * self.resolution))
-        lbl.grid(row=1, column=3, padx=5, ipady=2.5, sticky=N)
+                              bg='#0e1c24', foreground='#3a97a9', width=450)
+        lbl.grid(row=2, column=3, sticky=N + S + E)
+        lbl = CustomFontLabel(self.root, text="{}p".format(str(self.last_score)),
+                              font_path='resources/nidsans-webfont.ttf',
+                              bg='#0e1c24', foreground='#3a97a9', width=100)
+        lbl.grid(row=2, column=4, sticky=N + S + W)
+
+        with open('resources/ranking_all.json') as json_file:
+            astronaut_list_all = json.load(json_file)
+            sorted_list_all = sorted(astronaut_list_all, key=lambda astronaut: int(astronaut['score']))
+
+        with open('resources/ranking_day.json') as json_file:
+            astronaut_list_day = json.load(json_file)
+            sorted_list_day = sorted(astronaut_list_day, key=lambda astronaut: int(astronaut['score']))
 
         # check if the last score is in top 5
-        if sorted(self.ranking.values())[0] < self.last_score:
-            self.ranking[str(self.last_id).strip()] = self.last_score
-            self.name_list[str(self.last_id).strip()] = self.last_name
-            remove_id = sorted(self.ranking, key=self.ranking.__getitem__)[0]
-            del self.ranking[remove_id]
-            del self.name_list[remove_id]
+        if int(sorted_list_day[0]['score']) < self.last_score:
+            del sorted_list_day[0]
+            astronaut_id = self.last_id
+            name = self.last_name
+            score = self.last_score
+            date = now.strftime("%d/%m")
+            sorted_list_day.append({
+                "id": astronaut_id,
+                "name": name,
+                "score": score,
+                "date": date
+            })
 
-        position = ['N', '', 'S', 'N', '']
+            # check if the last score is in top 20
+            if int(sorted_list_all[0]['score']) < self.last_score:
+                del sorted_list_all[0]
+                astronaut_id = self.last_id
+                name = self.last_name
+                score = self.last_score
+                date = now.strftime("%d/%m")
+                sorted_list_all.append({
+                    "id": astronaut_id,
+                    "name": name,
+                    "score": score,
+                    "date": date
+                })
+
         i = 0
-        for key in sorted(self.ranking, key=self.ranking.__getitem__, reverse=True):
+        sorted_five = sorted(sorted_list_day, key=lambda astronaut: int(astronaut['score']), reverse=True)[:5]
+        for astro in sorted_five:
             if i < 3:
                 lbl = CustomFontLabel(self.root,
-                                      text="{} - {}".format(str(self.name_list[key]), str(self.ranking[key])),
+                                      text="{}".format(astro['name']),
                                       font_path='resources/nidsans-webfont.ttf',
-                                      bg='#95cc71', fg='#1b3848', width=int(250 * self.resolution))
-                lbl.grid(row=3, column=3, padx=5, sticky=position[i], ipady=2.5, pady=2.5)
+                                      bg='#0e1c24', foreground='#3a97a9', width=450)
+                lbl.grid(row=8 + i, column=3, sticky=N + S + E)
+                lbl = CustomFontLabel(self.root,
+                                      text="{}p".format(astro['score']),
+                                      font_path='resources/nidsans-webfont.ttf',
+                                      bg='#0e1c24', foreground='#3a97a9', width=100)
+                lbl.grid(row=8 + i, column=4, sticky=N + S + W)
                 i += 1
             else:
                 lbl = CustomFontLabel(self.root,
-                                      text="{} - {}".format(str(self.name_list[key]), str(self.ranking[key])),
+                                      text="{}".format(astro['name']),
                                       font_path='resources/nidsans-webfont.ttf',
-                                      bg='#95cc71', fg='#1b3848', width=int(250 * self.resolution))
-                lbl.grid(row=4, column=3, padx=5, sticky=position[i], ipady=2.5, pady=5)
+                                      bg='#0e1c24', foreground='#3a97a9', width=450)
+                lbl.grid(row=8 + i, column=3, sticky=N + S + E)
+                lbl = CustomFontLabel(self.root,
+                                      text="{}p".format(astro['score']),
+                                      font_path='resources/nidsans-webfont.ttf',
+                                      bg='#0e1c24', foreground='#3a97a9', width=100)
+                lbl.grid(row=8 + i, column=4, sticky=N + S + W)
                 i += 1
+
+        with open('resources/ranking_all.json', 'w') as json_file:
+            json.dump(sorted_list_all, json_file)
+        with open('resources/ranking_day.json', 'w') as json_file:
+            json.dump(sorted_list_day, json_file)
 
     def reset(self, astronaut_id, score, name):
         self.last_id = astronaut_id

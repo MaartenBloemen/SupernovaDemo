@@ -3,20 +3,13 @@ import tkinter.font as tkFont
 import cv2
 from PIL import Image, ImageFont, ImageDraw, ImageTk
 import json
+from webcam import WebcamStream
 
 
 class RankingWindow:
     def __init__(self, stream):
         self.video_stream = stream
         self.panel = None
-
-        self.resolution = 1.76666
-
-        self.last_score = -1
-        self.last_id = 0
-        self.last_name = "John"
-        self.ranking = {'-1': -1, '-2': -1, '-3': -1, '-4': -1, '-5': -1}
-        self.name_list = {'-1': 'John', '-2': 'Jane', '-3': 'Jo', '-4': 'Jean', '-5': 'Jonas'}
 
         self.root = tk.Tk()
         self.root.bind('<Escape>', lambda e: self.exit())
@@ -33,7 +26,7 @@ class RankingWindow:
             file="resources/craftworkz.png")
         logo_lbl = tk.Label(self.root, image=logo)
         logo_lbl.image = logo
-        # logo_lbl.grid(row=10, column=0, rowspan=9)
+        logo_lbl.grid(row=14, column=5, rowspan=7, padx=62.5, pady=62.5)
 
         self.display_ranking()
 
@@ -51,7 +44,7 @@ class RankingWindow:
             if self.panel is None:
                 self.panel = tk.Label(image=image)
                 self.panel.image = image
-                self.panel.grid(row=0, column=0, rowspan=20)
+                self.panel.grid(row=0, column=0, rowspan=20, padx=25)
             else:
                 self.panel.configure(image=image)
                 self.panel.image = image
@@ -67,10 +60,16 @@ class RankingWindow:
         exit(0)
 
     def display_ranking(self):
-        with open('resources/ranking.json') as json_file:
-            data = json.load(json_file)
-            astronaut_list = data['astronaut_list']
-            sorted_list = sorted(astronaut_list, key=lambda astronaut: astronaut['score'], reverse=True)
+        ipady = 45
+        with open('resources/ranking_all.json') as json_file:
+            astronaut_list = json.load(json_file)
+            sorted_list = sorted(astronaut_list, key=lambda astronaut: int(astronaut['score']), reverse=True)
+
+        lbl = CustomFontLabel(self.root,
+                              text="TOP-20 OF ALL TIME",
+                              font_path='resources/nidsans-webfont.ttf', bg='#95cc71', foreground='#0e1c24',
+                              width=1920, size=50)
+        lbl.grid(row=0, column=0, columnspan=6, ipady=5, pady=10)
 
         for row_index in range(1, 21):
             for column_index in range(1, 5):
@@ -79,30 +78,34 @@ class RankingWindow:
                 if column_index == 1:
                     lbl = CustomFontLabel(self.root,
                                           text="{}".format(str(row_index)),
-                                          font_path='resources/nidsans-webfont.ttf', bg='#95cc71', fg='#1b3848',
-                                          width=25)
-                    lbl.grid(row=row_index, column=column_index, ipady=5)
+                                          font_path='resources/nidsans-webfont.ttf', bg='#0e1c24', foreground='#3a97a9',
+                                          width=75, height=ipady)
+                    lbl.grid(row=row_index, column=column_index)
 
                 # shows the name
                 elif column_index == 2:
                     lbl = CustomFontLabel(self.root,
-                                          text="{}".format(sorted_list[row_index-1]['name']),
-                                          font_path='resources/nidsans-webfont.ttf', bg='#95cc71', fg='#1b3848')
+                                          text="{}".format(sorted_list[row_index - 1]['name']),
+                                          font_path='resources/nidsans-webfont.ttf', bg='#0e1c24', foreground='#3a97a9',
+                                          width=500, height=ipady, anchor='w')
                     lbl.grid(row=row_index, column=column_index)
 
                 # shows the score
                 elif column_index == 3:
                     lbl = CustomFontLabel(self.root,
-                                          text="{}".format(sorted_list[row_index-1]['score']),
-                                          font_path='resources/nidsans-webfont.ttf', bg='#95cc71', fg='#1b3848')
-                    lbl.grid(row=row_index, column=column_index)
+                                          text="{}".format(sorted_list[row_index - 1]['score']),
+                                          font_path='resources/nidsans-webfont.ttf', bg='#0e1c24', foreground='#3a97a9',
+                                          width=100, height=ipady)
+                    lbl.grid(row=row_index, column=column_index, )
 
                 # shows the date
                 elif column_index == 4:
                     lbl = CustomFontLabel(self.root,
-                                          text='{}'.format(sorted_list[row_index-1]['date']),
-                                          font_path='resources/nidsans-webfont.ttf', bg='#95cc71', fg='#1b3848')
+                                          text='{}'.format(sorted_list[row_index - 1]['date']),
+                                          font_path='resources/nidsans-webfont.ttf', bg='#0e1c24', foreground='#3a97a9',
+                                          width=150, height=ipady)
                     lbl.grid(row=row_index, column=column_index)
+        self.root.after(40, self.video_loop)
 
     @staticmethod
     def convert(img):
@@ -114,7 +117,7 @@ class RankingWindow:
 
 
 class CustomFontLabel(tk.Label):
-    text_size = 25
+    text_size = 35
 
     def __init__(self, master, text, foreground="black", true_type_font=None, font_path=None, size=text_size, **kwargs):
         if true_type_font is None:
@@ -132,3 +135,11 @@ class CustomFontLabel(tk.Label):
 
         self._photoimage = ImageTk.PhotoImage(image)
         tk.Label.__init__(self, master, image=self._photoimage, **kwargs)
+
+
+if __name__ == '__main__':
+    stream = WebcamStream(0)
+    stream.start()
+    rank = RankingWindow(stream)
+    rank.video_loop()
+    rank.root.mainloop()
