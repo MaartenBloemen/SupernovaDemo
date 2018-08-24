@@ -6,8 +6,10 @@ from ranking_screen import RankingWindow
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('model', type=str, help='Path to the model a protobuf (.pb) file.')
-    parser.add_argument('folder', type=str, help='Path to training data.')
+    parser.add_argument('model', type=str, help='Path to the model a protobuf (.pb) file.',
+                        default='inception-2015-12-05/classify_image_graph_def.pb')
+    parser.add_argument('folder', type=str, help='Path to training data.',
+                        default='/home/craftworkz/Documents/SupernovaTrainData')
     parser.add_argument('--video_src', type=int, help='The index of the video source.', default=0)
 
     args = parser.parse_args()

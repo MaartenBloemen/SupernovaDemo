@@ -86,7 +86,7 @@ class Window:
                               bg='#95cc71', fg='#1b3848', width=int(250 * self.resolution))
         lbl.grid(row=5, column=1, columnspan=2, padx=5, sticky=W, ipady=2.5)
 
-        btn = Button(self.root, text="Start!", command=lambda: self.start_clicked('space'),
+        btn = Button(self.root, text="Train!", command=lambda: self.start_clicked('space'),
                      width=int(5 * self.resolution), font=self.font,
                      highlightthickness=0, bd=0)
         btn.grid(row=6, column=1)
@@ -132,7 +132,7 @@ class Window:
 
     def video_loop(self):
         try:
-            frame = self.video_stream.frame
+            frame = cv2.flip(self.video_stream.frame, 1)
             # image = self.convert(self.video_stream.frame)
             if not self.ai_manager.training:
                 prediction, probability = self.ai_manager.classify_gesture_on_image(self.video_stream.frame)
