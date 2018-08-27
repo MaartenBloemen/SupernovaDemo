@@ -205,7 +205,7 @@ class SpaceInvaders:
                 self.enemy_update()
                 frame = self.video_stream.frame
                 prediction, probability = self.ai_manager.classify_gesture_on_image(frame)
-                if i == 2:
+                if i == 5:
                     self.ranking_screen.video_loop(frame, True)
                     i = 0
                 else:
