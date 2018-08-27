@@ -3,6 +3,16 @@ from gesture_screen import Window
 from webcam import WebcamStream
 from ai_manager import AiManager
 from ranking_screen import RankingWindow
+from multiprocessing import Process
+from tkinter import *
+
+
+# def video_loop(ui, rw, stream):
+#     frame = stream.frame
+#     ui.video_loop(frame)
+#     rw.video_loop(frame)
+#     root.after(100, video_loop(ui,rw,stream))
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -18,12 +28,15 @@ if __name__ == '__main__':
     stream.start()
 
     ai_manager = AiManager(args.model, args.folder)
+    root = Tk()
+    top = Toplevel()
 
-    # rank = RankingWindow(stream)
-    # rank.video_loop()
-
-    ui = Window(stream, ai_manager, args.folder)
-    ui.video_loop()
+    rw = RankingWindow(top)
+    ui = Window(root, stream, ai_manager, args.folder, rw)
     ui.save_images()
-    ui.root.mainloop()
+
+    ui.video_loop()
+
+    top.mainloop()
+
 

@@ -7,7 +7,7 @@ import cv2
 import requests
 import json
 import datetime
-
+from ranking_screen import RankingWindow
 
 class Window:
     FONT = cv2.FONT_HERSHEY_SIMPLEX
@@ -16,7 +16,9 @@ class Window:
     gesture = None
     wait_time = 30
 
-    def __init__(self, video_stream, ai_manager, save_location):
+    def __init__(self, tkFrame, video_stream, ai_manager, save_location, ranking_screen: RankingWindow):
+        self.ranking_screen = ranking_screen
+        self.root = tkFrame
         self.ai_manager = ai_manager
         self.video_stream = video_stream
         self.save_location = save_location
@@ -27,7 +29,7 @@ class Window:
         self.last_id = "5b7d6f2de6879"
         self.last_name = "John doe"
 
-        self.root = Tk()
+        # self.root = Tk()
         # self.root.attributes("-FULLSCREEN", True)
         self.root.bind('<Escape>', lambda e: self.exit())
         self.font = tkFont.Font(family='monospace', size=20, weight='bold')
@@ -54,7 +56,7 @@ class Window:
         # label and buttons to go left
         lbl = CustomFontLabel(self.root, text="Gestures to go left", font_path='resources/nidsans-webfont.ttf',
                               bg='#95cc71', fg='#1b3848', width=300)
-        lbl.grid(row=1, column=1, columnspan=2, ipady=5, padx=15, sticky=N+S+E+W)
+        lbl.grid(row=1, column=1, columnspan=2, ipady=5, padx=15, sticky=N + S + E + W)
 
         btn = Button(self.root, text="Train!", command=lambda: self.start_clicked('left'),
                      width=8, font=self.font,
@@ -69,7 +71,7 @@ class Window:
         # label and buttons to go right
         lbl = CustomFontLabel(self.root, text="Gestures to go right", font_path='resources/nidsans-webfont.ttf',
                               bg='#95cc71', fg='#1b3848', width=300)
-        lbl.grid(row=6, column=1, columnspan=2, ipady=5, padx=15, sticky=N+S+E+W)
+        lbl.grid(row=6, column=1, columnspan=2, ipady=5, padx=15, sticky=N + S + E + W)
 
         btn = Button(self.root, text="Train!", command=lambda: self.start_clicked('right'),
                      width=8, font=self.font,
@@ -84,7 +86,7 @@ class Window:
         # label and buttons to shoot
         lbl = CustomFontLabel(self.root, text="Gestures to shoot", font_path='resources/nidsans-webfont.ttf',
                               bg='#95cc71', fg='#1b3848', width=300)
-        lbl.grid(row=11, column=1, columnspan=2, ipady=5, padx=15, sticky=N+S+E+W)
+        lbl.grid(row=11, column=1, columnspan=2, ipady=5, padx=15, sticky=N + S + E + W)
 
         btn = Button(self.root, text="Train!", command=lambda: self.start_clicked('space'),
                      width=8, font=self.font,
@@ -97,7 +99,8 @@ class Window:
         btn.grid(row=12, column=2)
 
         # id
-        lbl = CustomFontLabel(self.root, text="             astronaut id: ", size=30, font_path='resources/nidsans-webfont.ttf',
+        lbl = CustomFontLabel(self.root, text="             astronaut id: ", size=30,
+                              font_path='resources/nidsans-webfont.ttf',
                               bg='#0e1c24', foreground='#3a97a9', anchor='w')
         lbl.grid(row=14, column=0, sticky=W + E + N + S, ipadx=20)
         self.txt = Text(self.root, height=1, width=15, font=("Helvetica", 25))
@@ -132,7 +135,10 @@ class Window:
 
     def video_loop(self):
         try:
-            frame = cv2.flip(self.video_stream.frame, 1)
+            # frame = cv2.flip(self.video_stream.frame, 1)
+            frame = self.video_stream.frame
+            self.ranking_screen.video_loop(frame, False)
+            # cv2.imwrite('resources/stream/image.JPEG', frame)
             # image = self.convert(self.video_stream.frame)
             if not self.ai_manager.training:
                 prediction, probability = self.ai_manager.classify_gesture_on_image(self.video_stream.frame)
@@ -166,7 +172,7 @@ class Window:
                 image = self.convert(frame)
 
             if self.panel is None:
-                self.panel = Label(image=image)
+                self.panel = Label(self.root, image=image)
                 self.panel.image = image
                 self.panel.grid(row=1, rowspan=12, padx=10, pady=10)
             else:
@@ -225,20 +231,42 @@ class Window:
             lbl = CustomFontLabel(self.root, text="You need to fill in your id! ",
                                   font_path='resources/nidsans-webfont.ttf', size=16,
                                   fg='#ffffff', bg="#ef5332")
-            lbl.grid(column=0, row=14, columnspan=3)
+            lbl.grid(column=0, row=15, sticky=N)
         else:
             astronaut_id = self.txt.get("1.0", END)
             # company_id, astronaut_id
-            """response = requests.get(
-                "http://supernova.madebyartcore.com/api/checkin/{}/{}".format(self.company_id, astronaut_id))
+            url = "http://supernova.madebyartcore.com/api/checkin/{}/{}".format(self.company_id, astronaut_id).strip()
+            print(url)
+            response = requests.get(url)
             data = response.json()
-            name = data["firstname"] + " " + data["lastname" """
-            name = "craftworkz"
-            self.root.withdraw()
-            SpaceInvaders(self.ai_manager, self.video_stream, self, astronaut_id, name).run()
+            print("_" * 50)
+            print(data)
+            print("_" * 50)
+            if data["code"] == 400:
+                if not data["errors"]["astronautFound"]:
+                    lbl = CustomFontLabel(self.root,
+                                          text="Your astronaut id is invalid! ",
+                                          font_path='resources/nidsans-webfont.ttf', size=16,
+                                          fg='#ffffff', bg="#ef5332")
+                    lbl.grid(column=0, row=15, sticky=N)
+                elif data["errors"]["alreadyCheckedIn"]:
+                    lbl = CustomFontLabel(self.root,
+                                          text="You already explored this planet! ",
+                                          font_path='resources/nidsans-webfont.ttf', size=16,
+                                          fg='#ffffff', bg="#ef5332")
+                    lbl.grid(column=0, row=15, sticky=N)
+                    name = "craftworkz"
+                    self.root.withdraw()
+                    SpaceInvaders(self.ai_manager, self.video_stream, self, astronaut_id, name, self.ranking_screen).run()
+            elif data["code"] == 200:
+                name = data["astronaut"]["firstname"] + " " + data["astronaut"]["lastname"]
+                # name = "craftworkz"
+                self.root.withdraw()
+                SpaceInvaders(self.ai_manager, self.video_stream, self, astronaut_id, name, self.ranking_screen).run()
 
     def display_ranking(self):
         now = datetime.datetime.now()
+        date = now.strftime("%d-%m")
 
         lbl = CustomFontLabel(self.root, text="{}".format(str(self.last_name).strip()),
                               font_path='resources/nidsans-webfont.ttf',
@@ -249,11 +277,11 @@ class Window:
                               bg='#0e1c24', foreground='#3a97a9', width=100)
         lbl.grid(row=2, column=4, sticky=N + S + W)
 
-        with open('resources/ranking_all.json') as json_file:
+        with open('resources/json_files/ranking_all.json') as json_file:
             astronaut_list_all = json.load(json_file)
             sorted_list_all = sorted(astronaut_list_all, key=lambda astronaut: int(astronaut['score']))
 
-        with open('resources/ranking_day.json') as json_file:
+        with open('resources/json_files/ranking_' + date + '.json') as json_file:
             astronaut_list_day = json.load(json_file)
             sorted_list_day = sorted(astronaut_list_day, key=lambda astronaut: int(astronaut['score']))
 
@@ -263,7 +291,6 @@ class Window:
             astronaut_id = self.last_id
             name = self.last_name
             score = self.last_score
-            date = now.strftime("%d/%m")
             sorted_list_day.append({
                 "id": astronaut_id,
                 "name": name,
@@ -277,7 +304,6 @@ class Window:
                 astronaut_id = self.last_id
                 name = self.last_name
                 score = self.last_score
-                date = now.strftime("%d/%m")
                 sorted_list_all.append({
                     "id": astronaut_id,
                     "name": name,
@@ -313,10 +339,11 @@ class Window:
                 lbl.grid(row=8 + i, column=4, sticky=N + S + W)
                 i += 1
 
-        with open('resources/ranking_all.json', 'w') as json_file:
+        with open('resources/json_files/ranking_all.json', 'w') as json_file:
             json.dump(sorted_list_all, json_file)
-        with open('resources/ranking_day.json', 'w') as json_file:
+        with open('resources/json_files/ranking_' + date + '.json', 'w') as json_file:
             json.dump(sorted_list_day, json_file)
+        self.ranking_screen.display_ranking()
 
     def reset(self, astronaut_id, score, name):
         self.last_id = astronaut_id

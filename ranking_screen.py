@@ -7,11 +7,11 @@ from webcam import WebcamStream
 
 
 class RankingWindow:
-    def __init__(self, stream):
-        self.video_stream = stream
+    def __init__(self, tkFrame):
+        # self.video_stream = stream
         self.panel = None
 
-        self.root = tk.Tk()
+        self.root = tkFrame
         self.root.bind('<Escape>', lambda e: self.exit())
         self.font = tkFont.Font(family='monospace', size=20, weight='bold')
 
@@ -34,34 +34,43 @@ class RankingWindow:
         self.root.wm_protocol("WM_DELETE_WINDOW", self.exit)
         # self.root.configure(background='#0e1c24')
 
-    def video_loop(self):
-        try:
-            frame = self.video_stream.frame
-            # image = self.convert(self.video_stream.frame)
+    def test(self):
+        print('*' * 50)
+        print('updating scores')
+        print('*' * 50)
 
-            image = self.convert(frame)
+    def video_loop(self, frame, game: bool):
+        try:
+            # frame = self.video_stream.frame
+            # image = self.convert(self.video_stream.frame)
+            # frame = cv2.imread('resources/stream/image.JPEG')
+            image = RankingWindow.convert(frame)
 
             if self.panel is None:
-                self.panel = tk.Label(image=image)
+                self.panel = tk.Label(self.root, image=image)
                 self.panel.image = image
                 self.panel.grid(row=0, column=0, rowspan=20, padx=25)
             else:
                 self.panel.configure(image=image)
                 self.panel.image = image
+            if game:
+                self.root.update()
         except RuntimeError as e:
             print("[INFO] caught a RuntimeError!")
             print(e)
 
-        self.root.after(5, self.video_loop)
+        # self.root.after(5, self.video_loop)
 
     def exit(self):
-        self.video_stream.stop()
         self.root.quit()
         exit(0)
 
     def display_ranking(self):
+        print('_'*50)
+        print('updating scores')
+        print('_'*50)
         ipady = 45
-        with open('resources/ranking_all.json') as json_file:
+        with open('resources/json_files/ranking_all.json') as json_file:
             astronaut_list = json.load(json_file)
             sorted_list = sorted(astronaut_list, key=lambda astronaut: int(astronaut['score']), reverse=True)
 
@@ -105,7 +114,6 @@ class RankingWindow:
                                           font_path='resources/nidsans-webfont.ttf', bg='#0e1c24', foreground='#3a97a9',
                                           width=150, height=ipady)
                     lbl.grid(row=row_index, column=column_index)
-        self.root.after(40, self.video_loop)
 
     @staticmethod
     def convert(img):
@@ -135,11 +143,3 @@ class CustomFontLabel(tk.Label):
 
         self._photoimage = ImageTk.PhotoImage(image)
         tk.Label.__init__(self, master, image=self._photoimage, **kwargs)
-
-
-if __name__ == '__main__':
-    stream = WebcamStream(0)
-    stream.start()
-    rank = RankingWindow(stream)
-    rank.video_loop()
-    rank.root.mainloop()

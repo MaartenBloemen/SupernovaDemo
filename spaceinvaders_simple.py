@@ -3,15 +3,17 @@ from pygame.locals import *
 import random
 import time
 import requests
+from ranking_screen import RankingWindow
 
 
 class SpaceInvaders:
-    def __init__(self, ai_manager, video_stream, ui, astronaut_id, name):
+    def __init__(self, ai_manager, video_stream, ui, astronaut_id, name, ranking_screen: RankingWindow):
+        self.ranking_screen = ranking_screen
         self.resolution = 1.7666666
         self.ai_manager = ai_manager
         self.video_stream = video_stream
         self.ui = ui
-        self.company_id = 0
+        self.company_id = "LNXOG3I5"
         self.astronaut_id = astronaut_id
         self.name = name
         self.score = 0
@@ -159,6 +161,7 @@ class SpaceInvaders:
         self.player.rect.left = int(400 * self.resolution)
 
     def run(self):
+        i = 0
         clock = pygame.time.Clock()
         for x in range(3):
             self.move_enemies_down()
@@ -200,7 +203,14 @@ class SpaceInvaders:
             elif self.lives > 0:
                 self.bullet_update()
                 self.enemy_update()
-                prediction, probability = self.ai_manager.classify_gesture_on_image(self.video_stream.frame)
+                frame = self.video_stream.frame
+                prediction, probability = self.ai_manager.classify_gesture_on_image(frame)
+                if i == 2:
+                    self.ranking_screen.video_loop(frame, True)
+                    i = 0
+                else:
+                    i += 1
+                    time.sleep(0.01)
                 if probability > 0.8:
                     self.player_update(prediction)
             elif self.lives <= 0:
@@ -220,9 +230,10 @@ class SpaceInvaders:
 
     def exit(self):
         # points / company_id / astronaut_id
-        """response = requests.post(
-            "http://supernova.madebyartcore.com/api/checkout/{}/{}/{}".format(self.score, self.company_id,
-                                                                              self.astronaut_id))"""
+        url = "http://supernova.madebyartcore.com/api/checkout/{}/{}/{}".format(self.score, self.company_id,
+                                                                                self.astronaut_id).strip()
+        response = requests.post(url)
+        print(response.json())
         time.sleep(2)
         self.ui.reset(self.astronaut_id, self.score, self.name)
         pygame.quit()
