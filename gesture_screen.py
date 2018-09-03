@@ -26,7 +26,7 @@ class Window:
         self.resolution = 1.76666
         self.company_id = "LNXOG3I5"
         self.last_score = -1
-        self.last_id = "5b7d6f2de6879"
+        self.last_id = -1    # ""5b7d6f2de6879"
         self.last_name = "John doe"
 
         # self.root = Tk()
@@ -48,6 +48,9 @@ class Window:
         logo_lbl.grid(row=14, column=3, rowspan=3, columnspan=2, padx=10, pady=10)
 
         self.panel = None
+        # id valid text
+        self.lbl = None
+
         label = CustomFontLabel(self.root, text="Click the buttons to start and stop recording gestures.",
                                 font_path='resources/nidsans-webfont.ttf', size=30, bg='#51ffff',
                                 fg='#1b3848', width=1920)
@@ -105,6 +108,7 @@ class Window:
         lbl.grid(row=14, column=0, sticky=W + E + N + S, ipadx=20)
         self.txt = Text(self.root, height=1, width=15, font=("Helvetica", 25))
         self.txt.grid(row=14, column=0)
+        self.txt.bind('<Return>', lambda e: self.start_space_invaders())
 
         # space invader
         lbl = CustomFontLabel(self.root, text=" ", size=30,
@@ -228,41 +232,52 @@ class Window:
 
     def start_space_invaders(self):
         if len(self.txt.get("1.0", END)) == 1:
-            lbl = CustomFontLabel(self.root, text="You need to fill in your id! ",
+            if self.lbl is not None:
+                self.lbl.destroy()
+            self.lbl = CustomFontLabel(self.root, text="You need to fill in your id! ",
                                   font_path='resources/nidsans-webfont.ttf', size=16,
                                   fg='#ffffff', bg="#ef5332")
-            lbl.grid(column=0, row=15, sticky=N)
+            self.lbl.grid(column=0, row=15, sticky=N)
         else:
-            astronaut_id = self.txt.get("1.0", END)
-            # company_id, astronaut_id
-            url = "http://supernova.madebyartcore.com/api/checkin/{}/{}".format(self.company_id, astronaut_id).strip()
-            print(url)
-            response = requests.get(url)
-            data = response.json()
-            print("_" * 50)
-            print(data)
-            print("_" * 50)
-            if data["code"] == 400:
-                if not data["errors"]["astronautFound"]:
-                    lbl = CustomFontLabel(self.root,
-                                          text="Your astronaut id is invalid! ",
-                                          font_path='resources/nidsans-webfont.ttf', size=16,
-                                          fg='#ffffff', bg="#ef5332")
-                    lbl.grid(column=0, row=15, sticky=N)
-                elif data["errors"]["alreadyCheckedIn"]:
-                    lbl = CustomFontLabel(self.root,
-                                          text="You already explored this planet! ",
-                                          font_path='resources/nidsans-webfont.ttf', size=16,
-                                          fg='#ffffff', bg="#ef5332")
-                    lbl.grid(column=0, row=15, sticky=N)
-                    name = "craftworkz"
+            astronaut_id = self.txt.get("1.0", END).strip()
+            print(astronaut_id)
+            if astronaut_id == '-1':
+                SpaceInvaders(self.ai_manager, self.video_stream, self, astronaut_id, 'demo', self.ranking_screen).run()
+            else:
+                # company_id, astronaut_id
+                url = "http://supernova.madebyartcore.com/api/checkin/{}/{}".format(self.company_id, astronaut_id).strip()
+                print(url)
+                response = requests.get(url)
+                data = response.json()
+                print("_" * 50)
+                print(data)
+                print("_" * 50)
+                if data["code"] == 400:
+                    if not data["errors"]["astronautFound"]:
+                        if self.lbl is not None:
+                            self.lbl.destroy()
+                        self.lbl = CustomFontLabel(self.root,
+                                              text="Your astronaut id is invalid! ",
+                                              font_path='resources/nidsans-webfont.ttf', size=16,
+                                              fg='#ffffff', bg="#ef5332")
+                        self.lbl.grid(column=0, row=15, sticky=N)
+                    elif data["errors"]["alreadyCheckedIn"]:
+                        if self.lbl is not None:
+                            self.lbl.destroy()
+                        self.lbl = CustomFontLabel(self.root,
+                                              text="You already explored this planet! ",
+                                              font_path='resources/nidsans-webfont.ttf', size=16,
+                                              fg='#ffffff', bg="#ef5332")
+                        self.lbl.grid(column=0, row=15, sticky=N)
+                        name = "craftworkz"
+                        self.root.withdraw()
+                        SpaceInvaders(self.ai_manager, self.video_stream, self, astronaut_id, name, self.ranking_screen).run()
+                elif data["code"] == 200:
+                    name = data["astronaut"]["firstname"] + " " + data["astronaut"]["lastname"]
+                    # name = "craftworkz"
                     self.root.withdraw()
                     SpaceInvaders(self.ai_manager, self.video_stream, self, astronaut_id, name, self.ranking_screen).run()
-            elif data["code"] == 200:
-                name = data["astronaut"]["firstname"] + " " + data["astronaut"]["lastname"]
-                # name = "craftworkz"
-                self.root.withdraw()
-                SpaceInvaders(self.ai_manager, self.video_stream, self, astronaut_id, name, self.ranking_screen).run()
+        return 'break'
 
     def display_ranking(self):
         now = datetime.datetime.now()
@@ -281,9 +296,18 @@ class Window:
             astronaut_list_all = json.load(json_file)
             sorted_list_all = sorted(astronaut_list_all, key=lambda astronaut: int(astronaut['score']))
 
-        with open('resources/json_files/ranking_' + date + '.json') as json_file:
-            astronaut_list_day = json.load(json_file)
-            sorted_list_day = sorted(astronaut_list_day, key=lambda astronaut: int(astronaut['score']))
+        try:
+            with open('resources/json_files/ranking_' + date + '.json') as json_file:
+                astronaut_list_day = json.load(json_file)
+                sorted_list_day = sorted(astronaut_list_day, key=lambda astronaut: int(astronaut['score']))
+        except FileNotFoundError:
+            with open('resources/json_files/ranking_' + date + '.json', 'w') as new_json_file:
+                with open('resources/json_files/ranking_day_original.json') as ranking_original:
+                    data = json.load(ranking_original)
+                json.dump(data, new_json_file)
+                print(data)
+            sorted_list_day = sorted(data, key=lambda astronaut: int(astronaut['score']))
+
 
         # check if the last score is in top 5
         if int(sorted_list_day[0]['score']) < self.last_score:
@@ -346,10 +370,13 @@ class Window:
         self.ranking_screen.display_ranking()
 
     def reset(self, astronaut_id, score, name):
-        self.last_id = astronaut_id
-        self.last_score = score
-        self.last_name = name
-        self.display_ranking()
+        if self.last_id == '-1':
+            self.last_id = astronaut_id
+            self.last_score = score
+            self.last_name = name
+            self.display_ranking()
+        if self.lbl is not None:
+            self.lbl.destroy()
         self.txt.delete('1.0', END)
         self.root.deiconify()
 
