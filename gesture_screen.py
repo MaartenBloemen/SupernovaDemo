@@ -139,8 +139,8 @@ class Window:
 
     def video_loop(self):
         try:
-            # frame = cv2.flip(self.video_stream.frame, 1)
-            frame = self.video_stream.frame
+            frame = cv2.flip(self.video_stream.frame, 1)
+            # frame = self.video_stream.frame
             self.ranking_screen.video_loop(frame, False)
             # cv2.imwrite('resources/stream/image.JPEG', frame)
             # image = self.convert(self.video_stream.frame)
@@ -370,7 +370,7 @@ class Window:
         self.ranking_screen.display_ranking()
 
     def reset(self, astronaut_id, score, name):
-        if self.last_id == '-1':
+        if astronaut_id != '-1':
             self.last_id = astronaut_id
             self.last_score = score
             self.last_name = name

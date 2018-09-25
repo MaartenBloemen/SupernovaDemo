@@ -224,16 +224,18 @@ class SpaceInvaders:
                     (int(175 * self.resolution), int(225 * self.resolution)))
                 pygame.display.flip()
                 self.exit()
-            self.screen.blit(self.font.render("Lives: {}".format(self.lives), -1, (255, 255, 255)), (20, 10))
-            self.screen.blit(self.font.render("Score: {}".format(self.score), -1, (255, 255, 255)), (400, 10))
+            self.screen.blit(pygame.font.Font("resources/nidsans-webfont.ttf", 50).render("Lives: {}".format(self.lives), -1, (255, 255, 255)), (20, 10))
+            self.screen.blit(pygame.font.Font("resources/nidsans-webfont.ttf", 50).render("Score: {}".format(self.score), -1, (255, 255, 255)), (400, 10))
             pygame.display.flip()
 
     def exit(self):
         # points / company_id / astronaut_id
-        url = "http://supernova.madebyartcore.com/api/checkout/{}/{}/{}".format(self.score, self.company_id,
-                                                                                self.astronaut_id).strip()
-        response = requests.post(url)
-        print(response.json())
+        if self.astronaut_id != '-1':
+            url = "http://supernova.madebyartcore.com/api/checkout/{}/{}/{}".format(self.score, self.company_id,
+                                                                                    self.astronaut_id).strip()
+            response = requests.post(url)
+            print(response.json())
+
         time.sleep(2)
         self.ui.reset(self.astronaut_id, self.score, self.name)
         pygame.quit()

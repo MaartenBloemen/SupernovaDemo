@@ -3,7 +3,6 @@ import tkinter.font as tkFont
 import cv2
 from PIL import Image, ImageFont, ImageDraw, ImageTk
 import json
-from webcam import WebcamStream
 
 
 class RankingWindow:
@@ -34,16 +33,12 @@ class RankingWindow:
         self.root.wm_protocol("WM_DELETE_WINDOW", self.exit)
         # self.root.configure(background='#0e1c24')
 
-    def test(self):
-        print('*' * 50)
-        print('updating scores')
-        print('*' * 50)
-
     def video_loop(self, frame, game: bool):
         try:
             # frame = self.video_stream.frame
             # image = self.convert(self.video_stream.frame)
             # frame = cv2.imread('resources/stream/image.JPEG')
+            # frame = cv2.flip(frame, 1)
             image = RankingWindow.convert(frame)
 
             if self.panel is None:
