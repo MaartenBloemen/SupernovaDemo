@@ -33,7 +33,7 @@ class SpaceInvaders:
         # self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 
         self.background = Background("resources/images/background.jpg", [0, 0])
-        self.player = Player("resources/images/ship.png", [int(400 * self.resolution), int(550 * self.resolution)])
+        self.player = Player("resources/images/ship.png", [int(400 * self.resolution), int(500 * self.resolution)])
 
         self.animationOn = 0
         self.direction = 1
@@ -46,7 +46,7 @@ class SpaceInvaders:
         self.enemies = []
         self.make_enemies()
         self.barrierParticles = []
-        self.chance = 985
+        self.chance = 950
 
         barrier_x = int(50 * self.resolution)
         barrier_y = int(425 * self.resolution)
