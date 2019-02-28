@@ -5,10 +5,10 @@ from sklearn.neighbors import KNeighborsClassifier
 class KnnClassifier:
     knn_classifier = None
 
-    def __init__(self, train_data, target_classes, nrof_neighborgs=2):
+    def __init__(self, train_data, target_classes, nrof_neighborgs=20):
         self.train_new_knn_classifier(train_data, target_classes, nrof_neighborgs)
 
-    def train_new_knn_classifier(self, train_data, target_classes, nrof_neighborgs=2):
+    def train_new_knn_classifier(self, train_data, target_classes, nrof_neighborgs=20):
         self.knn_classifier = KNeighborsClassifier(n_neighbors=nrof_neighborgs)
         self.knn_classifier.fit(train_data, target_classes)
 

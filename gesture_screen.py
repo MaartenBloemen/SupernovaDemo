@@ -27,7 +27,7 @@ class Window:
         self.company_id = "LNXOG3I5"
         self.last_score = -1
         self.last_id = -1    # ""5b7d6f2de6879"
-        self.last_name = "John doe"
+        self.last_name = "None"
 
         # self.root = Tk()
         # self.root.attributes("-FULLSCREEN", True)
@@ -102,7 +102,7 @@ class Window:
         btn.grid(row=12, column=2)
 
         # id
-        lbl = CustomFontLabel(self.root, text="             astronaut id: ", size=30,
+        lbl = CustomFontLabel(self.root, text="             player name: ", size=30,
                               font_path='resources/nidsans-webfont.ttf',
                               bg='#0e1c24', foreground='#3a97a9', anchor='w')
         lbl.grid(row=14, column=0, sticky=W + E + N + S, ipadx=20)
@@ -115,7 +115,7 @@ class Window:
                               font_path='resources/nidsans-webfont.ttf',
                               bg='#0e1c24', foreground='#3a97a9', anchor='w')
         lbl.grid(row=15, column=0, sticky=W + E + N + S, ipadx=20)
-        btn = Button(self.root, text="Start space invader", command=self.start_space_invaders,
+        btn = Button(self.root, text="Start space invaders", command=self.start_space_invaders,
                      width=30, font=self.font,
                      highlightthickness=0, bd=0, bg="#51ffff")
         btn.grid(row=15, column=0)
@@ -234,14 +234,16 @@ class Window:
         if len(self.txt.get("1.0", END)) == 1:
             if self.lbl is not None:
                 self.lbl.destroy()
-            self.lbl = CustomFontLabel(self.root, text="You need to fill in your id! ",
+            self.lbl = CustomFontLabel(self.root, text="You need to fill in a name! ",
                                   font_path='resources/nidsans-webfont.ttf', size=16,
                                   fg='#ffffff', bg="#ef5332")
             self.lbl.grid(column=0, row=15, sticky=N)
         else:
             astronaut_id = self.txt.get("1.0", END).strip()
+            name = astronaut_id
             print(astronaut_id)
-            if astronaut_id == '-1':
+            SpaceInvaders(self.ai_manager, self.video_stream, self, astronaut_id, name, self.ranking_screen).run()
+            '''if astronaut_id == '-1':
                 SpaceInvaders(self.ai_manager, self.video_stream, self, astronaut_id, 'demo', self.ranking_screen).run()
             else:
                 # company_id, astronaut_id
@@ -276,7 +278,7 @@ class Window:
                     name = data["astronaut"]["firstname"] + " " + data["astronaut"]["lastname"]
                     # name = "craftworkz"
                     self.root.withdraw()
-                    SpaceInvaders(self.ai_manager, self.video_stream, self, astronaut_id, name, self.ranking_screen).run()
+                    SpaceInvaders(self.ai_manager, self.video_stream, self, astronaut_id, name, self.ranking_screen).run()'''
         return 'break'
 
     def display_ranking(self):
@@ -322,18 +324,18 @@ class Window:
                 "date": date
             })
 
-            # check if the last score is in top 20
-            if int(sorted_list_all[0]['score']) < self.last_score:
-                del sorted_list_all[0]
-                astronaut_id = self.last_id
-                name = self.last_name
-                score = self.last_score
-                sorted_list_all.append({
-                    "id": astronaut_id,
-                    "name": name,
-                    "score": score,
-                    "date": date
-                })
+        # check if the last score is in top 20
+        if int(sorted_list_all[0]['score']) < self.last_score:
+            del sorted_list_all[0]
+            astronaut_id = self.last_id
+            name = self.last_name
+            score = self.last_score
+            sorted_list_all.append({
+                "id": astronaut_id,
+                "name": name,
+                "score": score,
+                "date": date
+            })
 
         i = 0
         sorted_five = sorted(sorted_list_day, key=lambda astronaut: int(astronaut['score']), reverse=True)[:5]

@@ -230,13 +230,13 @@ class SpaceInvaders:
 
     def exit(self):
         # points / company_id / astronaut_id
-        if self.astronaut_id != '-1':
+        '''if self.astronaut_id != '-1':
             url = "http://supernova.madebyartcore.com/api/checkout/{}/{}/{}".format(self.score, self.company_id,
                                                                                     self.astronaut_id).strip()
             response = requests.post(url)
             print(response.json())
 
-        time.sleep(2)
+        time.sleep(2)'''
         self.ui.reset(self.astronaut_id, self.score, self.name)
         pygame.quit()
 
